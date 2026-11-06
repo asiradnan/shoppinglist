@@ -6,6 +6,14 @@ let currentCategory = "All"
 const addButton = document.getElementById("add")
 addButton.addEventListener("click", addItemToList)
 
+async function fetchShoppingList() {
+	const response = await fetch('https://shoppinglistbackend.asiradnan.com/api/items/');
+	const data = await response.json();
+	console.log(data)
+}
+
+fetchShoppingList()
+
 function addItemToList() {
 	const itemInput = document.querySelector("#itemName")
 	if (itemInput.value.trim() == "") return;
