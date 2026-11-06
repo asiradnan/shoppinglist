@@ -1,0 +1,28 @@
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.completed{
+  text-decoration: line-through;
+}
+
+#shoppingList {
+  width: 75%;
+  margin: auto;
+  margin-top: 20px;
+  display : grid;
+  grid-template-columns:  auto auto auto;
+  column-gap: 10px;
+}
+
+#inputDiv {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 5px;
+}
+
+.vanish {
+  display: none;
+}
