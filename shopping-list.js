@@ -7,7 +7,10 @@ const addButton = document.getElementById("add")
 addButton.addEventListener("click", addItemToList)
 
 async function fetchShoppingList() {
-	const response = await fetch('https://shoppinglistbackend.asiradnan.com/api/items/');
+	const response = await fetch('https://shoppinglistbackend.asiradnan.com/api/items/', {
+		credentials: 'include'
+	});
+	if (response.status == 401 || response.status == 403) window.location.href = `https://accounts.asiradnan.com/login?next=${encodeURIComponent(window.location.href)}`
 	const data = await response.json();
 	console.log(data)
 }
