@@ -1,10 +1,26 @@
 const shoppingList = [{ name: "Mango", completed: false, deleted: false, category: "Fruit", cost: 0 }]
+let remoteList = []
 let totalExpense = 0
 let deletedCount = 0
 let currentCategory = "All"
-
+const API_URL = "https://shoppinglistbackend.asiradnan.com/api"
 const addButton = document.getElementById("add")
 addButton.addEventListener("click", addItemToList)
+
+function getCookie(name='csrftoken') {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 async function fetchShoppingList() {
 	const response = await fetch('https://shoppinglistbackend.asiradnan.com/api/items/', {
@@ -12,23 +28,35 @@ async function fetchShoppingList() {
 	});
 	if (response.status == 401 || response.status == 403) window.location.href = `https://accounts.asiradnan.com/login?next=${encodeURIComponent(window.location.href)}`
 	const data = await response.json();
-	console.log(data)
+	console.log(data);
+	remoteList = data;
+	console.log(remoteList)
 }
 
 fetchShoppingList()
 
-function addItemToList() {
+async function addItemToList() {
 	const itemInput = document.querySelector("#itemName")
 	if (itemInput.value.trim() == "") return;
 	const itemCategory = document.getElementById("categories")
 	//console.log(itemCategory.value)
+    
 	const newItem = {
-		name: itemInput.value,
-		completed: false,
-		deleted: false,
-		category: itemCategory.value,
-		cost: 0
+		name: itemInput.value
 	}
+
+	const response = await fetch(`${API_URL}/items/`, {
+		method: "POST",
+		headers: {
+			'Content-Type' : 'application/json',
+			'X-CSRFToken': getCookie()
+		},
+		body: JSON.stringify(newItem),
+		credentials: "include"
+	})
+	console.log(response)
+	const data = await response.json()
+	console.log(data)
 	shoppingList.push(newItem)
 	itemInput.value = ""
 	// alert(shoppingList)
