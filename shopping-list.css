@@ -1,13 +1,15 @@
-body{
+/* body{
     display: flex;
     flex-direction: column;
     height: 100vh;
+} */
+#list {
+  height: 100%;
 }
-
 .completed{
   text-decoration: line-through;
 }
-
+/* 
 #shoppingList {
   width: 75%;
   margin: auto;
@@ -15,7 +17,7 @@ body{
   display : grid;
   grid-template-columns:  auto auto auto;
   column-gap: 10px;
-}
+} */
 
 #inputDiv {
   display: grid;

@@ -4,22 +4,25 @@ let totalExpense = 0
 let deletedCount = 0
 let currentCategory = "All"
 const API_URL = "https://shoppinglistbackend.asiradnan.com/api"
+
 const addButton = document.getElementById("add")
+const shoppingListDisplay = document.getElementById("shoppingList")
+
 addButton.addEventListener("click", addItemToList)
 
-function getCookie(name='csrftoken') {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
+function getCookie(name = 'csrftoken') {
+	let cookieValue = null;
+	if (document.cookie && document.cookie !== '') {
+		const cookies = document.cookie.split(';');
+		for (let i = 0; i < cookies.length; i++) {
+			const cookie = cookies[i].trim();
+			if (cookie.substring(0, name.length + 1) === (name + '=')) {
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
+			}
+		}
+	}
+	return cookieValue;
 }
 
 async function fetchShoppingList() {
@@ -31,16 +34,16 @@ async function fetchShoppingList() {
 	console.log(data);
 	remoteList = data;
 	console.log(remoteList)
+	displayList()
 }
 
-fetchShoppingList()
 
 async function addItemToList() {
 	const itemInput = document.querySelector("#itemName")
 	if (itemInput.value.trim() == "") return;
 	const itemCategory = document.getElementById("categories")
 	//console.log(itemCategory.value)
-    
+
 	const newItem = {
 		name: itemInput.value
 	}
@@ -48,7 +51,7 @@ async function addItemToList() {
 	const response = await fetch(`${API_URL}/items/`, {
 		method: "POST",
 		headers: {
-			'Content-Type' : 'application/json',
+			'Content-Type': 'application/json',
 			'X-CSRFToken': getCookie()
 		},
 		body: JSON.stringify(newItem),
@@ -63,47 +66,137 @@ async function addItemToList() {
 	update()
 }
 
-const shoppingListDisplay = document.getElementById("shoppingList")
+async function updateItem(itemToBeUpdated) {
+	const response = await fetch(`${API_URL}/items/${itemToBeUpdated.id}/`, {
+		method: "PUT",
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie()
+		},
+		credentials: "include",
+		body: JSON.stringify(itemToBeUpdated),
+	})
+	const data = await response.json();
+	console.log(data)
+	return data
+}
 
-function update() {
-	
+async function deleteItem(idx) {
+	const id = remoteList[idx].id
+	const response = await fetch(`${API_URL}/items/${id}/`, {
+		method: "DELETE",
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie()
+		},
+		credentials: "include"
+	})
+	remoteList.splice(idx, 1)
+	displayList()
+	// shoppingList[idx].deleted = !shoppingList[idx].deleted
+	// deletedCount += (shoppingList[idx].deleted) ? 1 : -1
+}
+
+function displayList() {
 	shoppingListDisplay.replaceChildren()
-	shoppingList.forEach((item, idx) => {
-		if (item.deleted) return;
-		if (currentCategory != "All" && currentCategory != item.category) return;
+	remoteList.forEach((item, idx) => {
 		const li = document.createElement("li")
-		li.innerHTML = `${item.name} (${item.category})`
+		li.innerHTML = `${item.name}`
 		if (item.completed) {
 			li.classList.add("completed")
 		}
+
 		const doneButton = document.createElement("button")
 		doneButton.innerHTML = (item.completed) ? "Clear" : "Done"
 		doneButton.addEventListener("click", () => toggleCompletedStatus(idx))
-		
-		const deleteButton = document.createElement("button")
-		deleteButton.innerHTML = "Delete"
-		deleteButton.addEventListener("click", () => toggleDeletedStatus(idx))
-		
+
 		const cost = document.createElement("span")
 		cost.innerText = item.cost
+
+		const deleteButton = document.createElement("button")
+		deleteButton.innerHTML = "Delete"
+		deleteButton.addEventListener("click", () => deleteItem(idx))
+
+
 		shoppingListDisplay.appendChild(li)
 		shoppingListDisplay.appendChild(doneButton)
 		if (item.completed) {
 			shoppingListDisplay.appendChild(cost)
 		}
-		else {
-			shoppingListDisplay.appendChild(deleteButton)
-		}
+		shoppingListDisplay.appendChild(deleteButton)
 	})
+}
+
+
+async function toggleCompletedStatus(idx) {
+	let itemToBeUpdated = remoteList[idx]
+	if (itemToBeUpdated.completed) {
+		itemToBeUpdated.cost = 0;
+	}
+
+	else {
+		let cost = prompt("Enter cost: ")
+		if (cost == null) return
+		cost = Number(cost)
+		while (Number.isNaN(cost)) {
+			cost = prompt("Enter cost (only digits: ")
+			if (cost == null) return
+			cost = parseInt(cost)
+		}
+		itemToBeUpdated.cost = parseInt(cost)
+	}
+	itemToBeUpdated.completed = !itemToBeUpdated.completed
+	console.log(remoteList)
+	const updatedItem = await updateItem(itemToBeUpdated)
+	remoteList[idx] = updatedItem
+	console.log(remoteList)
+	displayList()
+}
+
+
+
+fetchShoppingList()
+
+function update() {
+
+	// shoppingListDisplay.replaceChildren()
+	// shoppingList.forEach((item, idx) => {
+	// 	if (item.deleted) return;
+	// 	if (currentCategory != "All" && currentCategory != item.category) return;
+	// 	const li = document.createElement("li")
+	// 	li.innerHTML = `${item.name} (${item.category})`
+	// 	if (item.completed) {
+	// 		li.classList.add("completed")
+	// 	}
+	// 	const doneButton = document.createElement("button")
+	// 	doneButton.innerHTML = (item.completed) ? "Clear" : "Done"
+	// 	doneButton.addEventListener("click", () => toggleCompletedStatus(idx))
+
+	// 	const deleteButton = document.createElement("button")
+	// 	deleteButton.innerHTML = "Delete"
+	// 	deleteButton.addEventListener("click", () => toggleDeletedStatus(idx))
+
+	// 	const cost = document.createElement("span")
+	// 	cost.innerText = item.cost
+	// 	shoppingListDisplay.appendChild(li)
+	// 	shoppingListDisplay.appendChild(doneButton)
+	// 	if (item.completed) {
+	// 		shoppingListDisplay.appendChild(cost)
+	// 	}
+	// 	else {
+	// 		shoppingListDisplay.appendChild(deleteButton)
+	// 	}
+	// })
 	if (shoppingList.length - deletedCount === 0) {
 		const h3 = document.createElement("h3")
 		h3.innerHTML = 'No Items'
 		shoppingListDisplay.appendChild(h3)
-	if (shoppingList.length - deletedCount === 0) {
-	const h3 = document.createElement("h3")
-	h3.innerHTML = 'No Items'
-	shoppingListDisplay.appendChild(h3)
-}}
+		if (shoppingList.length - deletedCount === 0) {
+			const h3 = document.createElement("h3")
+			h3.innerHTML = 'No Items'
+			shoppingListDisplay.appendChild(h3)
+		}
+	}
 	calculateExpense()
 }
 
@@ -123,36 +216,8 @@ function calculateExpense() {
 	}
 }
 
-function toggleCompletedStatus(idx) {
-	// idx = event.currentTarget.id
-	console.log(idx)
-	let isCompleted = shoppingList[idx].completed
-	if (isCompleted) {
-		shoppingList[idx].cost = 0;
-	}
-	
-	else {
-		let cost = prompt("Enter cost: ")
-		if (cost == null) return
-		cost = Number(cost)
-		while (Number.isNaN(cost))
-		{
-			cost = prompt("Enter cost (only digits: ")
-			if (cost == null) return
-			cost = parseInt(cost)
-		}
-		shoppingList[idx].cost = parseInt(cost)
-	}
-	isCompleted = !isCompleted
-	shoppingList[idx].completed = isCompleted
-	update()
-}
 
-function toggleDeletedStatus(idx) {
-	shoppingList[idx].deleted = !shoppingList[idx].deleted
-	deletedCount += (shoppingList[idx].deleted) ? 1 : -1
-	update()
-}
+
 
 const categories = ["Fruit", "Vegetable", "Grocery", "Meats"]
 
@@ -168,7 +233,7 @@ function changeFilterCategory(event) {
 function makeCategoryList() {
 	const categoriesDropdown = document.getElementById("categories")
 	const filterCategories = document.getElementById("filterCategory")
-	
+
 	const option = document.createElement("option")
 	option.value = "All"
 	option.innerHTML = "All"
@@ -182,9 +247,12 @@ function makeCategoryList() {
 	})
 }
 
-const author = {name: "Asir Adnan", address: "Dhaka"}
-localStorage.setItem("author",JSON.stringify(author))
+
+
+const author = { name: "Asir Adnan", address: "Dhaka" }
+localStorage.setItem("author", JSON.stringify(author))
 //localStorage.setItem("time", Date())
 console.log(JSON.parse(localStorage.getItem("author")).address)
-update()
-makeCategoryList()
+// update()
+// makeCategoryList()
+
