@@ -61,7 +61,7 @@ async function addItemToList() {
 
 	const data = await response.json()
 	console.log(data)
-	remoteList.push(newItem)
+	remoteList.push(data)
 	itemInput.value = ""
 	displayList()
 }
@@ -99,6 +99,12 @@ async function deleteItem(idx) {
 
 function displayList() {
 	fetching.style.display = "none"
+	remoteList.sort((a, b) => {
+		if (a.completed && !b.completed) return 1;
+		if (b.completed && !a.completed) return -1;
+		return 0
+	})
+	console.log(remoteList)
 	shoppingListDisplay.replaceChildren()
 	remoteList.forEach((item, idx) => {
 		const li = document.createElement("li")
@@ -113,8 +119,7 @@ function displayList() {
 		doneButton.innerHTML = (item.completed) ? "Clear" : "Done"
 		doneButton.addEventListener("click", () => toggleCompletedStatus(idx))
 
-		const cost = document.createElement("span")
-		cost.innerText = item.cost + " Taka"
+
 
 		const deleteButton = document.createElement("button")
 		deleteButton.innerHTML = "Delete"
@@ -122,6 +127,9 @@ function displayList() {
 
 		div.appendChild(itemName)
 		if (item.completed) {
+			const cost = document.createElement("span")
+			cost.innerText = item.cost + " Taka"
+			cost.classList.add("cost")
 			div.appendChild(cost)
 		}
 		div.appendChild(doneButton)
