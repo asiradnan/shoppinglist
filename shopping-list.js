@@ -3,10 +3,12 @@ let remoteList = []
 let totalExpense = 0
 let deletedCount = 0
 let currentCategory = "All"
+let isFetching = true
 const API_URL = "https://shoppinglistbackend.asiradnan.com/api"
 
 const addButton = document.getElementById("add")
 const shoppingListDisplay = document.getElementById("shoppingList")
+const fetching = document.getElementById("fetching")
 
 addButton.addEventListener("click", addItemToList)
 
@@ -26,6 +28,7 @@ function getCookie(name = 'csrftoken') {
 }
 
 async function fetchShoppingList() {
+	isFetching = true
 	const response = await fetch('https://shoppinglistbackend.asiradnan.com/api/items/', {
 		credentials: 'include'
 	});
@@ -41,8 +44,6 @@ async function fetchShoppingList() {
 async function addItemToList() {
 	const itemInput = document.querySelector("#itemName")
 	if (itemInput.value.trim() == "") return;
-	const itemCategory = document.getElementById("categories")
-	//console.log(itemCategory.value)
 
 	const newItem = {
 		name: itemInput.value
@@ -57,13 +58,12 @@ async function addItemToList() {
 		body: JSON.stringify(newItem),
 		credentials: "include"
 	})
-	console.log(response)
+
 	const data = await response.json()
 	console.log(data)
-	shoppingList.push(newItem)
+	remoteList.push(newItem)
 	itemInput.value = ""
-	// alert(shoppingList)
-	update()
+	displayList()
 }
 
 async function updateItem(itemToBeUpdated) {
@@ -98,12 +98,15 @@ async function deleteItem(idx) {
 }
 
 function displayList() {
+	fetching.style.display = "none"
 	shoppingListDisplay.replaceChildren()
 	remoteList.forEach((item, idx) => {
 		const li = document.createElement("li")
-		li.innerHTML = `${item.name}`
+		const div = document.createElement("div")
+		const itemName = document.createElement("span")
+		itemName.innerHTML = `${item.name}`
 		if (item.completed) {
-			li.classList.add("completed")
+			itemName.classList.add("completed")
 		}
 
 		const doneButton = document.createElement("button")
@@ -111,19 +114,19 @@ function displayList() {
 		doneButton.addEventListener("click", () => toggleCompletedStatus(idx))
 
 		const cost = document.createElement("span")
-		cost.innerText = item.cost
+		cost.innerText = item.cost + " Taka"
 
 		const deleteButton = document.createElement("button")
 		deleteButton.innerHTML = "Delete"
 		deleteButton.addEventListener("click", () => deleteItem(idx))
 
-
-		shoppingListDisplay.appendChild(li)
-		shoppingListDisplay.appendChild(doneButton)
+		div.appendChild(itemName)
 		if (item.completed) {
-			shoppingListDisplay.appendChild(cost)
+			div.appendChild(cost)
 		}
-		shoppingListDisplay.appendChild(deleteButton)
+		div.appendChild(doneButton)
+		li.appendChild(div)
+		shoppingListDisplay.appendChild(li)
 	})
 }
 
