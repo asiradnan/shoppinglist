@@ -12,22 +12,9 @@ const fetching = document.getElementById("fetching")
 
 addButton.addEventListener("click", addItemToList)
 
-function getCookie(name = 'csrftoken') {
-	let cookieValue = null;
-	if (document.cookie && document.cookie !== '') {
-		const cookies = document.cookie.split(';');
-		for (let i = 0; i < cookies.length; i++) {
-			const cookie = cookies[i].trim();
-			if (cookie.substring(0, name.length + 1) === (name + '=')) {
-				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-				break;
-			}
-		}
-	}
-	return cookieValue;
-}
-
 async function fetchShoppingList() {
+	await setFamily()
+	const selectedFamilyId = JSON.parse(localStorage.getItem("family")).id
 	isFetching = true
 	const response = await fetch('https://shoppinglistbackend.asiradnan.com/api/items/', {
 		credentials: 'include'
@@ -35,7 +22,7 @@ async function fetchShoppingList() {
 	if (response.status == 401 || response.status == 403) window.location.href = `https://accounts.asiradnan.com/login?next=${encodeURIComponent(window.location.href)}`
 	const data = await response.json();
 	console.log(data);
-	remoteList = data;
+	remoteList = data.filter((item) => item.family == selectedFamilyId);
 	console.log(remoteList)
 	displayList()
 }
@@ -46,7 +33,8 @@ async function addItemToList() {
 	if (itemInput.value.trim() == "") return;
 
 	const newItem = {
-		name: itemInput.value
+		name: itemInput.value,
+		family: JSON.parse(localStorage.getItem("family")).id
 	}
 
 	const response = await fetch(`${API_URL}/items/`, {
@@ -98,14 +86,23 @@ async function deleteItem(idx) {
 }
 
 function displayList() {
+	const selectedFamilyId = JSON.parse(localStorage.getItem("family")).id
 	fetching.style.display = "none"
+	shoppingListDisplay.replaceChildren()
+	remoteList.filter((item) => item.family == selectedFamilyId)
+	if (remoteList.length === 0) {
+		const h5 = document.createElement("h5")
+		h5.innerHTML = 'No Items for this family. Try switching family or create new item.'
+		shoppingListDisplay.appendChild(h5)
+		console.log("here")
+	}
 	remoteList.sort((a, b) => {
 		if (a.completed && !b.completed) return 1;
 		if (b.completed && !a.completed) return -1;
 		return 0
 	})
 	console.log(remoteList)
-	shoppingListDisplay.replaceChildren()
+	
 	remoteList.forEach((item, idx) => {
 		const li = document.createElement("li")
 		const div = document.createElement("div")
@@ -198,16 +195,9 @@ function update() {
 	// 		shoppingListDisplay.appendChild(deleteButton)
 	// 	}
 	// })
-	if (shoppingList.length - deletedCount === 0) {
-		const h3 = document.createElement("h3")
-		h3.innerHTML = 'No Items'
-		shoppingListDisplay.appendChild(h3)
-		if (shoppingList.length - deletedCount === 0) {
-			const h3 = document.createElement("h3")
-			h3.innerHTML = 'No Items'
-			shoppingListDisplay.appendChild(h3)
-		}
-	}
+	// if (shoppingList.length - deletedCount === 0) {
+
+	// }
 	calculateExpense()
 }
 

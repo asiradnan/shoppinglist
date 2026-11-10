@@ -8,33 +8,18 @@ const addButton = document.getElementById("add")
 addButton.addEventListener("click", createFamily)
 
 
-function getCookie(name = 'csrftoken') {
-	let cookieValue = null;
-	if (document.cookie && document.cookie !== '') {
-		const cookies = document.cookie.split(';');
-		for (let i = 0; i < cookies.length; i++) {
-			const cookie = cookies[i].trim();
-			if (cookie.substring(0, name.length + 1) === (name + '=')) {
-				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-				break;
-			}
-		}
-	}
-	return cookieValue;
-}
-
 async function fetchFamilies() {
-    const response = await fetch(`${API_URL}/families/`, {
-        credentials: "include"
-    })
-    const data = await response.json()
-    console.log(data)
-    families = data
-    displayFamilies()
+	const response = await fetch(`${API_URL}/families/`, {
+		credentials: "include"
+	})
+	const data = await response.json()
+	console.log(data)
+	families = data
+	displayFamilies()
 }
 
 async function createFamily() {
-    const familyName = document.querySelector("#familyName")
+	const familyName = document.querySelector("#familyName")
 	if (familyName.value.trim() == "") return;
 
 	const family = {
@@ -53,20 +38,35 @@ async function createFamily() {
 
 	const data = await response.json()
 	console.log(data)
-    familyName.value = ""
-    families.push(data)
-    displayFamilies()
+	familyName.value = ""
+	families.push(data)
+	displayFamilies()
 }
 
 function displayFamilies() {
-    if (families.length == 0) familyList.innerHTML = "No Family"
-    else {
-        families.forEach(family => {
-            const li = document.createElement("li")
-            li.innerHTML = family.name
-            familyList.appendChild(li)
-        });
-    }
+	if (families.length == 0) familyList.innerHTML = "No Family"
+	else {
+		const selectedFamilyId = JSON.parse(localStorage.getItem("family")).id
+		familyList.replaceChildren()
+		families.forEach((family, idx) => {
+			const li = document.createElement("li")
+			const div = document.createElement("div")
+			div.innerHTML = family.name
+			if (family.id != selectedFamilyId) {
+				const button = document.createElement("button")
+				button.innerHTML = "select"
+				button.addEventListener("click", () => selectFamily(family.id))
+				div.appendChild(button)
+			}
+			li.appendChild(div)
+			familyList.appendChild(li)
+		});
+	}
 }
 
+function selectFamily(id) {
+	console.log("id=",id)
+	localStorage.setItem("family", JSON.stringify({ id: id }))
+	displayFamilies()
+}
 fetchFamilies()
