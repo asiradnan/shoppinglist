@@ -4,9 +4,10 @@ let families = []
 
 const familyList = document.getElementById('familyList')
 const addButton = document.getElementById("add")
+const inviteMemberForm = document.getElementById("inviteMemberForm")
 
 addButton.addEventListener("click", createFamily)
-
+inviteMemberForm.addEventListener("submit", inviteMember)
 
 async function fetchFamilies() {
 	const response = await fetch(`${API_URL}/families/`, {
@@ -64,8 +65,25 @@ function displayFamilies() {
 	}
 }
 
+async function inviteMember(event) {
+	event.preventDefault();
+	const formData = new FormData(inviteMemberForm);
+	const email = formData.get('email');
+	const selectedFamilyId = JSON.parse(localStorage.getItem("family")).id
+	const response = await fetch(`${API_URL}/families/${selectedFamilyId}/invite/`, {
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie()
+		},
+		body: JSON.stringify({"email": email}),
+		credentials: "include"
+	})
+
+	const data = await response.json()
+	console.log(data)
+}
 function selectFamily(id) {
-	console.log("id=",id)
 	localStorage.setItem("family", JSON.stringify({ id: id }))
 	displayFamilies()
 }
