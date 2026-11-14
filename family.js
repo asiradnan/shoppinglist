@@ -15,6 +15,7 @@ async function fetchFamilies() {
 	console.log(data)
 	families = data
 	isFetching = false
+	if (localStorage.getItem("user") == null) await fetchUser()
 	displayFamilies()
 }
 
@@ -50,6 +51,7 @@ function displayFamilies() {
 	if (families.length == 0) familyList.innerHTML = "No Family"
 	else {
 		const selectedFamilyId = JSON.parse(localStorage.getItem("family")).id
+		const currentUser = JSON.parse(localStorage.getItem("user"))
 		familyList.replaceChildren()
 		families.forEach((family, idx) => {
 			const li = document.createElement("li")
@@ -86,21 +88,24 @@ function displayFamilies() {
 			})
 			familyDetailDiv.appendChild(familyTitle)
 			familyDetailDiv.appendChild(members)
-			const inviteForm = document.createElement('form')
-			const input = document.createElement("input")
-			input.type = "email"
-			input.placeholder = "member@email.com"
-			input.name = "email"
-			const formSubmitButton = document.createElement("button")
-			formSubmitButton.type = "submit"
-			formSubmitButton.innerHTML = "Invite Member"
-			inviteForm.appendChild(input)
-			inviteForm.appendChild(formSubmitButton)
-			inviteForm.addEventListener("submit", (event) => {
-				event.preventDefault()
-				inviteMember(input.value, family.id)
-		})
-			familyDetailDiv.appendChild(inviteForm)
+			console.log(currentUser, family.created_by)
+			if (currentUser.username == family.created_by || currentUser.user_id == family.created_by) {
+				const inviteForm = document.createElement('form')
+				const input = document.createElement("input")
+				input.type = "email"
+				input.placeholder = "member@email.com"
+				input.name = "email"
+				const formSubmitButton = document.createElement("button")
+				formSubmitButton.type = "submit"
+				formSubmitButton.innerHTML = "Invite Member"
+				inviteForm.appendChild(input)
+				inviteForm.appendChild(formSubmitButton)
+				inviteForm.addEventListener("submit", (event) => {
+					event.preventDefault()
+					inviteMember(input.value, family.id)
+				})
+				familyDetailDiv.appendChild(inviteForm)
+			}
 			li.appendChild(div)
 			li.appendChild(familyDetailDiv)
 			familyList.appendChild(li)
@@ -109,9 +114,7 @@ function displayFamilies() {
 }
 
 async function inviteMember(email, familyId) {
-	event.preventDefault();
-	const selectedFamilyId = JSON.parse(localStorage.getItem("family")).id
-	const response = await fetch(`${API_URL}/families/${selectedFamilyId}/invite/`, {
+	const response = await fetch(`${API_URL}/families/${familyId}/invite/`, {
 		method: "POST",
 		headers: {
 			'Content-Type': 'application/json',

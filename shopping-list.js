@@ -12,6 +12,11 @@ const fetching = document.getElementById("fetching")
 
 addButton.addEventListener("click", addItemToList)
 
+function removeLoadingScreen() {
+	document.getElementById("loadingDiv").style.display = "none"
+	document.querySelector("main").style.display = "flex"
+}
+
 async function fetchShoppingList() {
 	await setFamily()
 	const selectedFamilyId = JSON.parse(localStorage.getItem("family")).id
@@ -162,7 +167,7 @@ async function toggleCompletedStatus(idx) {
 }
 
 
-
+fetchUser()
 fetchShoppingList()
 
 function update() {
