@@ -2,7 +2,7 @@ let isFetching = true
 const API_URL = "https://shoppinglistbackend.asiradnan.com/api"
 let families = []
 
-const familyList = document.getElementById('familyList')
+const familyList = document.getElementById("familyList")
 const addButton = document.getElementById("add")
 
 addButton.addEventListener("click", createFamily)
@@ -69,7 +69,9 @@ function displayFamilies() {
 					detailButton.innerHTML = "Show Detail"
 				}
 			})
-			div.innerHTML = family.name
+			const span = document.createElement("span")
+			span.innerHTML = family.name
+			div.appendChild(span)
 			if (family.id != selectedFamilyId) {
 				const button = document.createElement("button")
 				button.innerHTML = "select"
@@ -90,6 +92,23 @@ function displayFamilies() {
 			familyDetailDiv.appendChild(members)
 			console.log(currentUser, family.created_by)
 			if (currentUser.username == family.created_by || currentUser.user_id == family.created_by) {
+				const updateForm = document.createElement('form')
+				const nameInput = document.createElement("input")
+				nameInput.placeholder = "New family name"
+				nameInput.name = "name"
+				const updateFormSubmitButton = document.createElement("button")
+				updateFormSubmitButton.type = "submit"
+				updateFormSubmitButton.innerHTML = "Change Name"
+				updateForm.appendChild(nameInput)
+				updateForm.appendChild(updateFormSubmitButton)
+				updateForm.addEventListener("submit", async (event) => {
+					event.preventDefault()
+					const updatedFamily = await updateFamily({ ...family, "name": nameInput.value })
+					span.innerHTML = updatedFamily.name
+					nameInput.value = ""
+				})
+				familyDetailDiv.appendChild(updateForm)
+
 				const inviteForm = document.createElement('form')
 				const input = document.createElement("input")
 				input.type = "email"
@@ -127,8 +146,26 @@ async function inviteMember(email, familyId) {
 	const data = await response.json()
 	console.log(data)
 }
+
 function selectFamily(id) {
 	localStorage.setItem("family", JSON.stringify({ id: id }))
 	displayFamilies()
 }
+
+async function updateFamily(toBeUpdatedFamily) {
+	console.log("update:", JSON.stringify(toBeUpdatedFamily))
+	const response = await fetch(`${API_URL}/families/${toBeUpdatedFamily.id}/`, {
+		method: "PUT",
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCookie()
+		},
+		credentials: "include",
+		
+		body: JSON.stringify(toBeUpdatedFamily)
+	})
+	const data = await response.json()
+	return data
+}
+
 fetchFamilies()
