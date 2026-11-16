@@ -18,7 +18,7 @@ main {
   align-items: center;
 }
 
-#inputDiv {
+#itemAddForm {
   width: 75%;
   display: grid;
   grid-template-columns: auto auto auto;

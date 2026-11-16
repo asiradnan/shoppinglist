@@ -3,9 +3,13 @@ const API_URL = "https://shoppinglistbackend.asiradnan.com/api"
 let families = []
 
 const familyList = document.getElementById("familyList")
-const addButton = document.getElementById("add")
+const familyCreateForm = document.getElementById("familyCreateForm")
 
-addButton.addEventListener("click", createFamily)
+familyCreateForm.addEventListener("submit", (event) => {
+	event.preventDefault()
+	createFamily()
+})
+
 
 async function fetchFamilies() {
 	const response = await fetch(`${API_URL}/families/`, {
@@ -41,6 +45,7 @@ async function createFamily() {
 	console.log(data)
 	familyName.value = ""
 	families.push(data)
+	if (families.length == 1) selectFamily(data.id)
 	displayFamilies()
 }
 
@@ -48,44 +53,44 @@ function displayFamilies() {
 	if (isFetching == false) {
 		document.getElementById("fetching").style.display = "none"
 	}
-	if (families.length == 0) familyList.innerHTML = "No Family"
+	if (families.length == 0) familyList.textContent = "No Family"
 	else {
-		const selectedFamilyId = JSON.parse(localStorage.getItem("family")).id
+		const selectedFamilyId = JSON.parse(localStorage.getItem("family"))?.id ?? 0;
 		const currentUser = JSON.parse(localStorage.getItem("user"))
 		familyList.replaceChildren()
 		families.forEach((family, idx) => {
 			const li = document.createElement("li")
 			const div = document.createElement("div")
 			const detailButton = document.createElement("button")
-			detailButton.innerHTML = "Show Detail"
+			detailButton.textContent = "Show Detail"
 			const familyDetailDiv = document.createElement("div")
 			detailButton.addEventListener("click", () => {
 				if (familyDetailDiv.style.display == "none") {
 					familyDetailDiv.style.display = "block"
-					detailButton.innerHTML = "Hide Detail"
+					detailButton.textContent = "Hide Detail"
 				}
 				else {
 					familyDetailDiv.style.display = "none"
-					detailButton.innerHTML = "Show Detail"
+					detailButton.textContent = "Show Detail"
 				}
 			})
 			const span = document.createElement("span")
-			span.innerHTML = family.name
+			span.textContent = family.name
 			div.appendChild(span)
 			if (family.id != selectedFamilyId) {
 				const button = document.createElement("button")
-				button.innerHTML = "select"
+				button.textContent = "select"
 				button.addEventListener("click", () => selectFamily(family.id))
 				div.appendChild(button)
 			}
 			div.appendChild(detailButton)
 			familyDetailDiv.style.display = "none"
 			const familyTitle = document.createElement("h3")
-			familyTitle.innerHTML = "Members"
+			familyTitle.textContent = "Members"
 			const members = document.createElement("ol")
 			family.members.forEach((member) => {
 				const memberLi = document.createElement("li")
-				memberLi.innerHTML = member.username
+				memberLi.textContent = member.username
 				members.appendChild(memberLi)
 			})
 			familyDetailDiv.appendChild(familyTitle)
@@ -98,13 +103,13 @@ function displayFamilies() {
 				nameInput.name = "name"
 				const updateFormSubmitButton = document.createElement("button")
 				updateFormSubmitButton.type = "submit"
-				updateFormSubmitButton.innerHTML = "Change Name"
+				updateFormSubmitButton.textContent = "Change Name"
 				updateForm.appendChild(nameInput)
 				updateForm.appendChild(updateFormSubmitButton)
 				updateForm.addEventListener("submit", async (event) => {
 					event.preventDefault()
 					const updatedFamily = await updateFamily({ ...family, "name": nameInput.value })
-					span.innerHTML = updatedFamily.name
+					span.textContent = updatedFamily.name
 					nameInput.value = ""
 				})
 				familyDetailDiv.appendChild(updateForm)
@@ -116,7 +121,7 @@ function displayFamilies() {
 				input.name = "email"
 				const formSubmitButton = document.createElement("button")
 				formSubmitButton.type = "submit"
-				formSubmitButton.innerHTML = "Invite Member"
+				formSubmitButton.textContent = "Invite Member"
 				inviteForm.appendChild(input)
 				inviteForm.appendChild(formSubmitButton)
 				inviteForm.addEventListener("submit", (event) => {

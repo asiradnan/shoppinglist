@@ -14,20 +14,21 @@ function getCookie(name = 'csrftoken') {
 }
 
 async function fetchUser() {
-	localStorage.removeItem("user")
-	const response = await fetch(`${API_URL}/me/`, {
-		credentials: 'include'
-	});
-	if (response.status == 401 || response.status == 403) {
-		window.location.href = `https://accounts.asiradnan.com/login?next=${encodeURIComponent(window.location.href)}`
-		return 
-	}
-	const data = await response.json();
-	localStorage.setItem("user", JSON.stringify(data))
-	document.getElementById("profile").innerHTML = data.username
-	removeLoadingScreen()
-	await fetchShoppingList();
-	console.log(data);
+    localStorage.removeItem("user")
+    const response = await fetch(`${API_URL}/me/`, {
+        credentials: 'include'
+    });
+    if (response.status == 401 || response.status == 403) {
+        window.location.href = `https://accounts.asiradnan.com/login?next=${encodeURIComponent(window.location.href)}`
+        return
+    }
+    const data = await response.json();
+    localStorage.setItem("user", JSON.stringify(data))
+    const profileEl = document.getElementById("profile");
+    if (profileEl) {
+        profileEl.textContent = data.username;
+    }
+    console.log(data);
 }
 
 async function setFamily() {
@@ -36,6 +37,7 @@ async function setFamily() {
         credentials: "include"
     })
     const data = await response.json()
-    localStorage.setItem("family", JSON.stringify({ id: data[0].id }))
+    if (Array.isArray(data) && data.length > 0)
+        localStorage.setItem("family", JSON.stringify({ id: data[0].id }))
 }
 

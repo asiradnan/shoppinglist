@@ -21,11 +21,10 @@
     </div>
     <main>
         <h3>Today's Shopping List</h3>
-        <div id="inputDiv">
+        <form id="itemAddForm">
             <input type="text" id="itemName" name="item" placeholder="Add new item">
-            <!-- <select name="categories" id="categories"></select> -->
-            <button id="add">Add</button>
-        </div>
+            <button type="submit">Add</button>
+        </form>
         <section>
             <p id="fetching">Fetching list..</p>
             <ol id="shoppingList"></ol>
@@ -34,9 +33,9 @@
     </main>
 
 
-    <section id="expenseSection" class="vanish">
+    <!-- <section id="expenseSection" class="vanish">
         <p id="expense">Total Expense: </p>
-    </section>
+    </section> -->
     <!-- <footer>
         Under Development by <a href="https://asiradnan.com">Asir Adnan</a>
     </footer> -->

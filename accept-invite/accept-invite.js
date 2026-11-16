@@ -15,7 +15,7 @@ async function joinFamily(token) {
     const data = await response.json()
     if (response.ok) window.location.href = "/"
     else {
-        document.getElementById("status").innerHTML = data.error
+        document.getElementById("status").textContent = data.error
     }
 }
 
