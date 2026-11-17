@@ -24,10 +24,6 @@ async function fetchUser() {
     }
     const data = await response.json();
     localStorage.setItem("user", JSON.stringify(data))
-    const profileEl = document.getElementById("profile");
-    if (profileEl) {
-        profileEl.textContent = data.username;
-    }
     console.log(data);
 }
 

@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Quicksand:wght@300..700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="shopping-list.css">
     <link rel="stylesheet" href="common.css">
     <title>Shopping List</title>
@@ -11,10 +16,20 @@
 
 <body>
     <header>
-        <h1>Asir Shopping List</h1>
+        <div id="titleDiv">
+            <span id="icon">🛒</span>
+            <h1> Family Shopping List</h1>
+        </div>
         <div>
+            <a href="index.html" class="selectedNav">List</a>
             <a href="family.html">Family</a>
-            <a id="profile" href="https://accounts.asiradnan.com/users/profile" target="_blank">Profile</a>
+            <a href="https://accounts.asiradnan.com/users/profile" target="_blank" aria-label="Profile">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+                    <path
+                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
+                    </path>
+                </svg>
+            </a>
         </div>
     </header>
     <div id="loadingDiv">
@@ -24,18 +39,31 @@
         <h3 id="headerWithFamilyName">Today's Shopping List</h3>
         <form id="itemAddForm">
             <input type="text" id="itemName" name="item" placeholder="Add new item">
-            <button type="submit">Add</button>
+            <button type="submit">+ Add</button>
         </form>
         <section>
             <p id="fetching">Fetching list..</p>
-            <ol id="shoppingList"></ol>
+            <div class="smallHeadingBeforeList vanish" id="shoppingListHeading">
+                <h4>Still to get</h4> <span>Tap Done when packed</span>
+            </div>
+            <ul id="shoppingList">
+
+            </ul>
+            <hr id="hr" class="vanish">
+            <div class="smallHeadingBeforeList vanish" id="checkedListHeading">
+                <h4>Done</h4>
+                <p id="totalCost">Total: Taka</p>
+            </div>
+            <ul id="checkedList">
+
+            </ul>
         </section>
 
     </main>
 
-    <!-- <footer>
-        Under Development by <a href="https://asiradnan.com">Asir Adnan</a>
-    </footer> -->
+    <footer>
+        <a href="https://asiradnan.com">Asir Adnan © 2026</a>
+    </footer>
     <script src="common.js"></script>
     <script src="shopping-list.js"></script>
 </body>

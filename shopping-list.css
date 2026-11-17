@@ -1,27 +1,59 @@
+body {
+  background-color: #FDF9F2 ;
+  font-family:  "Plus Jakarta Sans", sans-serif;
+}
+
 main {
   display: none;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
 }
 
+#headerWithFamilyName {
+  font-size: 1rem;
+
+}
+
+
 #itemAddForm {
-  width: 75%;
+  /* width: 75%; */
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
   column-gap: 5px;
 }
 
-main section {
-  width: 75%;
+.smallHeadingBeforeList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.smallHeadingBeforeList h4 {
+  font-size: 0.85rem;
+}
+
+.smallHeadingBeforeList span {
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.smallHeadingBeforeList p {
+  font-size: 0.85rem;
+}
+
+li {
+  list-style: none;
 }
 
 li div {
   display: flex;
   justify-content: space-between;
 }
-.completed{
+
+.completed {
   text-decoration: line-through;
 }
+
 /* 
 #shoppingList {
   width: 75%;
@@ -32,3 +64,6 @@ li div {
   column-gap: 10px;
 } */
 
+.vanish {
+  display: none;
+}

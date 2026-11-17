@@ -7,7 +7,10 @@ const API_URL = "https://shoppinglistbackend.asiradnan.com/api"
 
 const itemAddForm = document.getElementById("itemAddForm")
 const shoppingListDisplay = document.getElementById("shoppingList")
+const checkedListDisplay = document.getElementById("checkedList")
 const fetching = document.getElementById("fetching")
+const shoppingListHeading = document.getElementById("shoppingListHeading")
+const checkedListHeading = document.getElementById("checkedListHeading")
 
 itemAddForm.addEventListener("submit", (event) => {
 	event.preventDefault()
@@ -103,15 +106,14 @@ async function deleteItem(idx) {
 	})
 	shoppingList.splice(idx, 1)
 	displayList()
-	// shoppingList[idx].deleted = !shoppingList[idx].deleted
-	// deletedCount += (shoppingList[idx].deleted) ? 1 : -1
 }
 
 function displayList() {
 	const selectedFamily = JSON.parse(localStorage.getItem("family"))
 	const selectedFamilyId = selectedFamily.id
-	document.getElementById("headerWithFamilyName").textContent = `${selectedFamily.name} Shopping List`
+	document.getElementById("headerWithFamilyName").textContent = `${selectedFamily.name} Family Shopping List`
 	fetching.style.display = "none"
+	shoppingListHeading.classList.remove("vanish")
 	shoppingListDisplay.replaceChildren()
 	shoppingList.filter((item) => item.family == selectedFamilyId)
 	if (shoppingList.length === 0) {
@@ -120,44 +122,76 @@ function displayList() {
 		shoppingListDisplay.appendChild(h5)
 		console.log("here")
 	}
-	shoppingList.sort((a, b) => {
-		if (a.completed && !b.completed) return 1;
-		if (b.completed && !a.completed) return -1;
-		return 0
-	})
-	console.log(shoppingList)
-
+	const checkedList = shoppingList.filter((item) => item.completed)
+	shoppingList.filter((item) => !item.completed)
 	shoppingList.forEach((item, idx) => {
 		const li = document.createElement("li")
 		const div = document.createElement("div")
 		const itemName = document.createElement("span")
 		itemName.textContent = `${item.name}`
-		if (item.completed) {
-			itemName.classList.add("completed")
-		}
+
+		const buttonsDiv = document.createElement("div")
 
 		const doneButton = document.createElement("button")
-		doneButton.textContent = (item.completed) ? "Clear" : "Done"
+		doneButton.textContent = "\u2713 Done"
 		doneButton.addEventListener("click", () => toggleCompletedStatus(idx))
 
-
-
 		const deleteButton = document.createElement("button")
-		deleteButton.textContent = "Delete"
+		deleteButton.textContent = "\u2715"
 		deleteButton.addEventListener("click", () => deleteItem(idx))
 
+		buttonsDiv.appendChild(doneButton)
+		buttonsDiv.appendChild(deleteButton)
+
 		div.appendChild(itemName)
-		if (item.completed) {
-			const cost = document.createElement("span")
-			cost.innerText = item.cost + " Taka"
-			cost.classList.add("cost")
-			div.appendChild(cost)
-		}
-		div.appendChild(doneButton)
-		div.appendChild(deleteButton)
+
+		div.appendChild(buttonsDiv)
 		li.appendChild(div)
 		shoppingListDisplay.appendChild(li)
 	})
+
+	if (checkedList.length) {
+		let totalCost = 0
+		checkedList.forEach((item, idx) => {
+			totalCost += item.cost
+			const li = document.createElement("li")
+			const div = document.createElement("div")
+			const itemName = document.createElement("span")
+			itemName.textContent = `${item.name}`
+			itemName.classList.add("completed")
+
+			const buttonsDiv = document.createElement("div")
+
+			const cost = document.createElement("span")
+			cost.innerText = item.cost + " Taka"
+			cost.classList.add("cost")
+
+			const clearButton = document.createElement("button")
+			clearButton.textContent = "Clear"
+			clearButton.addEventListener("click", () => toggleCompletedStatus(idx))
+
+			const deleteButton = document.createElement("button")
+			deleteButton.textContent = "\u2715"
+			deleteButton.addEventListener("click", () => deleteItem(idx))
+
+			buttonsDiv.appendChild(cost)
+			buttonsDiv.appendChild(clearButton)
+			buttonsDiv.appendChild(deleteButton)
+
+			div.appendChild(itemName)
+			if (item.completed) {
+
+			}
+			div.appendChild(buttonsDiv)
+			li.appendChild(div)
+			checkedListDisplay.appendChild(li)
+		})
+		document.getElementById("totalCost").textContent = `Total: ${totalCost} Taka`
+		document.getElementById("hr").classList.remove("vanish")
+		checkedListHeading.classList.remove("vanish")
+	}
+
+
 }
 
 
