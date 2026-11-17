@@ -108,7 +108,9 @@ async function deleteItem(idx) {
 }
 
 function displayList() {
-	const selectedFamilyId = JSON.parse(localStorage.getItem("family"))?.id ?? 0
+	const selectedFamily = JSON.parse(localStorage.getItem("family"))
+	const selectedFamilyId = selectedFamily.id
+	document.getElementById("headerWithFamilyName").textContent = `${selectedFamily.name} Shopping List`
 	fetching.style.display = "none"
 	shoppingListDisplay.replaceChildren()
 	shoppingList.filter((item) => item.family == selectedFamilyId)

@@ -19,7 +19,10 @@ async function fetchFamilies() {
 	console.log(data)
 	families = data
 	isFetching = false
-	if (localStorage.getItem("user") == null) await fetchUser()
+	if (localStorage.getItem("user") == null) {
+		await fetchUser()
+	}
+	document.getElementById("profile").textContent = JSON.parse(localStorage.getItem("user")).username
 	displayFamilies()
 }
 
@@ -45,7 +48,7 @@ async function createFamily() {
 	console.log(data)
 	familyName.value = ""
 	families.push(data)
-	if (families.length == 1) selectFamily(data.id)
+	if (families.length == 1) selectFamily(data)
 	displayFamilies()
 }
 
@@ -80,7 +83,7 @@ function displayFamilies() {
 			if (family.id != selectedFamilyId) {
 				const button = document.createElement("button")
 				button.textContent = "select"
-				button.addEventListener("click", () => selectFamily(family.id))
+				button.addEventListener("click", () => selectFamily(family))
 				div.appendChild(button)
 			}
 			div.appendChild(detailButton)
@@ -110,6 +113,7 @@ function displayFamilies() {
 					event.preventDefault()
 					const updatedFamily = await updateFamily({ ...family, "name": nameInput.value })
 					span.textContent = updatedFamily.name
+					if (family.id == selectedFamilyId) selectFamily({ id: updatedFamily.id, name: updatedFamily.name })
 					nameInput.value = ""
 				})
 				familyDetailDiv.appendChild(updateForm)
@@ -124,9 +128,11 @@ function displayFamilies() {
 				formSubmitButton.textContent = "Invite Member"
 				inviteForm.appendChild(input)
 				inviteForm.appendChild(formSubmitButton)
-				inviteForm.addEventListener("submit", (event) => {
+				inviteForm.addEventListener("submit", async (event) => {
 					event.preventDefault()
-					inviteMember(input.value, family.id)
+					const response = await inviteMember(input.value, family.id)
+					alert(response.ok? "Invite sent!" : "Could not sent invite")
+					input.value = ""
 				})
 				familyDetailDiv.appendChild(inviteForm)
 			}
@@ -147,13 +153,11 @@ async function inviteMember(email, familyId) {
 		body: JSON.stringify({ "email": email }),
 		credentials: "include"
 	})
-
-	const data = await response.json()
-	console.log(data)
+	return response
 }
 
-function selectFamily(id) {
-	localStorage.setItem("family", JSON.stringify({ id: id }))
+function selectFamily(family) {
+	localStorage.setItem("family", JSON.stringify({ id: family.id, name: family.name }))
 	displayFamilies()
 }
 
@@ -166,7 +170,7 @@ async function updateFamily(toBeUpdatedFamily) {
 			'X-CSRFToken': getCookie()
 		},
 		credentials: "include",
-		
+
 		body: JSON.stringify(toBeUpdatedFamily)
 	})
 	const data = await response.json()

@@ -38,6 +38,6 @@ async function setFamily() {
     })
     const data = await response.json()
     if (Array.isArray(data) && data.length > 0)
-        localStorage.setItem("family", JSON.stringify({ id: data[0].id }))
+        localStorage.setItem("family", JSON.stringify({ id: data[0].id, name: data[0].name }))
 }
 
