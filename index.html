@@ -9,6 +9,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="shopping-list.css">
     <link rel="stylesheet" href="common.css">
     <title>Shopping List</title>
@@ -44,7 +45,7 @@
         <section>
             <p id="fetching">Fetching list..</p>
             <div class="smallHeadingBeforeList vanish" id="shoppingListHeading">
-                <h4>Still to get</h4> <span>Tap Done when packed</span>
+                <h4>Still to Get</h4> <span>Tap Done when packed</span>
             </div>
             <ul id="shoppingList">
 
@@ -52,7 +53,7 @@
             <hr id="hr" class="vanish">
             <div class="smallHeadingBeforeList vanish" id="checkedListHeading">
                 <h4>Done</h4>
-                <p id="totalCost">Total: Taka</p>
+                <p id="totalCost">Total: <span id="totalAmount"></span></p>
             </div>
             <ul id="checkedList">
 

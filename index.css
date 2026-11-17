@@ -1,0 +1,19 @@
+:root {
+  /* Surfaces */
+  --color-surface: #FDF9F3;
+  --color-surface-container-lowest: #FFFFFF;
+  --color-surface-container-low: #FAF4EA;
+
+  /* Primary (Matcha Green) */
+  --color-primary: #486B4E;
+  --color-matcha-light: #E9F1E8;
+
+  /* Secondary (Terracotta / Peach) */
+  --color-secondary: #E07A5F;
+  --color-peach: #FEECE3;
+
+  /* Typography & Borders */
+  --color-on-surface: #3C322C;
+  --color-on-surface-variant: #7A6E65;
+  --color-outline-variant: #EAE2D8;
+}

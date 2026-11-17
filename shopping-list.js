@@ -115,6 +115,7 @@ function displayList() {
 	fetching.style.display = "none"
 	shoppingListHeading.classList.remove("vanish")
 	shoppingListDisplay.replaceChildren()
+	checkedListDisplay.replaceChildren()
 	shoppingList.filter((item) => item.family == selectedFamilyId)
 	if (shoppingList.length === 0) {
 		const h5 = document.createElement("h5")
@@ -135,6 +136,7 @@ function displayList() {
 		const doneButton = document.createElement("button")
 		doneButton.textContent = "\u2713 Done"
 		doneButton.addEventListener("click", () => toggleCompletedStatus(idx))
+		doneButton.classList.add("doneButton")
 
 		const deleteButton = document.createElement("button")
 		deleteButton.textContent = "\u2715"
@@ -186,7 +188,7 @@ function displayList() {
 			li.appendChild(div)
 			checkedListDisplay.appendChild(li)
 		})
-		document.getElementById("totalCost").textContent = `Total: ${totalCost} Taka`
+		document.getElementById("totalAmount").textContent = `${totalCost} Taka`
 		document.getElementById("hr").classList.remove("vanish")
 		checkedListHeading.classList.remove("vanish")
 	}
