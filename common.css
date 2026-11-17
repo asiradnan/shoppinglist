@@ -40,7 +40,7 @@ header h1 {
   background-color: #feece3;
 }
 
-div {
+header div {
   width: 40%;
   display: flex;
   align-items: center;

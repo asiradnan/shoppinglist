@@ -1,6 +1,6 @@
 body {
-  background-color: #FDF9F2 ;
-  font-family:  "Plus Jakarta Sans", sans-serif;
+  background-color: #FDF9F2;
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 main {
@@ -10,16 +10,33 @@ main {
 }
 
 #headerWithFamilyName {
-  font-size: 1rem;
-
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
 
-#itemAddForm {
-  /* width: 75%; */
+form {
+  background-color: #FFFFFF;
+  padding: 2%;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 80% auto;
   column-gap: 5px;
+  border-radius: 10%;
+}
+
+input {
+  font-family: 'Plus Jakarta Sans';
+  padding: 4%;
+  font-size: 0.8rem;
+}
+
+form button {
+  background-color: #3E5C37;
+  color: #FFFFFF;
+  border-radius: 25px;
+  font-family: 'Plus Jakarta Sans';
+  font-size: 0.85rem;
+  border: none;
 }
 
 .smallHeadingBeforeList {
