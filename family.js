@@ -22,7 +22,6 @@ async function fetchFamilies() {
 	if (localStorage.getItem("user") == null) {
 		await fetchUser()
 	}
-	document.getElementById("profile").textContent = JSON.parse(localStorage.getItem("user")).username
 	displayFamilies()
 }
 

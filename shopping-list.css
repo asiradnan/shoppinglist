@@ -1,21 +1,7 @@
-body {
-  background-color: var(--color-surface);
-  font-family: "Plus Jakarta Sans", sans-serif;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  /* header, main, footer (use `1fr auto` if no header) */
-  min-height: 100dvh;
-  /* or 100vh */
-  /* margin: 0; */
-}
-
 main {
   display: none;
-  flex-direction: column;
-  margin-left: 8px;
-  margin-right: 8px;
-  justify-items: flex-start;
 }
+
 
 main section {
   width: 95%;
@@ -186,21 +172,4 @@ img {
 #clearButton {
   color: var(--color-on-surface-variant);
   font-weight: 500;
-}
-
-footer {
-  padding-top: 2%;
-  padding-bottom: 2%;
-  text-align: center;
-  background-color: var(--color-surface-container-low);
-}
-
-footer a {
-  text-decoration: none;
-  color: var(--color-on-surface);
-  font-size: 1rem;
-}
-
-.vanish {
-  display: none;
 }

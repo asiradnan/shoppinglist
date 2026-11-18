@@ -3,32 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Quicksand:wght@300..700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="common.css">
     <title>Family</title>
 </head>
 
 <body>
     <header>
-        <h1>Asir Shopping List</h1>
-        <div>
-            <a href="index.html">Shopping List</a>
-            <a id="profile" href="https://accounts.asiradnan.com/users/profile" target="_blank">Profile</a>
+        <div id="titleDiv">
+            <span id="icon">🛒</span>
+            <h1> Family Shopping List</h1>
+        </div>
+        <div id="rightDiv">
+            <a href="index.html">List</a>
+            <a href="family.html" class="selectedNav">Family</a>
+            <a href="https://accounts.asiradnan.com/users/profile" target="_blank" aria-label="Profile" id="profileIcon">
+                <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true">
+                    <path
+                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z">
+                    </path>
+                </svg>
+            </a>
         </div>
     </header>
-    <h4>My Families</h4>
-    <form id="familyCreateForm">
-        <input type="text" id="familyName" name="family" placeholder="Add new family">
-        <button type="submit">Create Family</button>
-    </form>
-    <p id="fetching">Fetching families..</p>
-    <ul id="familyList">
 
-    </ul>
-    <!-- <form id="inviteMemberForm">
-        <input type="email" placeholder="email" name="email">
-        <button type="submit">Invite Member</button>
-    </form> -->
+    <main>
+        <h4>My Families</h4>
+        <form id="familyCreateForm">
+            <input type="text" id="familyName" name="family" placeholder="Add new family">
+            <button type="submit">Create Family</button>
+        </form>
+        <p id="fetching">Fetching families..</p>
+        <ul id="familyList">
 
+        </ul>
+    </main>
+
+    <footer>
+        <a href="https://asiradnan.com" target="_blank">Asir Adnan © 2026</a>
+    </footer>
     <script src="common.js"></script>
     <script src="family.js"></script>
 </body>
