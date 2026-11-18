@@ -145,6 +145,7 @@ hr {
   align-items: center;
   align-content: center;
   padding: 1% ;
+  background-color: var(--color-surface-container-low);
 }
 
 img {

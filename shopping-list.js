@@ -1,5 +1,4 @@
 let shoppingList = []
-let totalExpense = 0
 let deletedCount = 0
 let currentCategory = "All"
 let isFetching = true
@@ -121,11 +120,22 @@ function displayList() {
 		const h5 = document.createElement("h5")
 		h5.textContent = 'No Items for this family. Try switching family or create new item.'
 		shoppingListDisplay.appendChild(h5)
-		console.log("here")
 	}
-	const checkedList = shoppingList.filter((item) => item.completed)
-	shoppingList.filter((item) => !item.completed)
+	let checkedList = []
+	let uncheckedList = []
+	let checkedIdices = []
+	let uncheckedIdices = []
 	shoppingList.forEach((item, idx) => {
+		if (item.completed) {
+			checkedList.push(item)
+			checkedIdices.push(idx)
+		}
+		else {
+			uncheckedList.push(item)
+			uncheckedIdices.push(idx)
+		}
+	})
+	uncheckedList.forEach((item, idx) => {
 		const li = document.createElement("li")
 		const div = document.createElement("div")
 		const itemName = document.createElement("span")
@@ -135,12 +145,12 @@ function displayList() {
 
 		const doneButton = document.createElement("button")
 		doneButton.textContent = "\u2713 Done"
-		doneButton.addEventListener("click", () => toggleCompletedStatus(idx))
+		doneButton.addEventListener("click", () => toggleCompletedStatus(uncheckedIdices[idx]))
 		doneButton.classList.add("doneButton")
 
 		const deleteButton = document.createElement("button")
 		deleteButton.textContent = "\u2715"
-		deleteButton.addEventListener("click", () => deleteItem(idx))
+		deleteButton.addEventListener("click", () => deleteItem(uncheckedIdices[idx]))
 
 		buttonsDiv.appendChild(doneButton)
 		buttonsDiv.appendChild(deleteButton)
@@ -161,7 +171,7 @@ function displayList() {
 			div.id = "checkedListDiv"
 			const img = document.createElement('img');
 			img.src = './assets/check.svg';
-			img.alt = 'Checkmark'; 
+			img.alt = 'Checkmark';
 
 			const itemName = document.createElement("span")
 			itemName.textContent = `${item.name}`
@@ -177,11 +187,11 @@ function displayList() {
 			const clearButton = document.createElement("button")
 			clearButton.id = "clearButton"
 			clearButton.textContent = "Clear"
-			clearButton.addEventListener("click", () => toggleCompletedStatus(idx))
+			clearButton.addEventListener("click", () => toggleCompletedStatus(checkedIdices[idx]))
 
 			const deleteButton = document.createElement("button")
 			deleteButton.textContent = "\u2715"
-			deleteButton.addEventListener("click", () => deleteItem(idx))
+			deleteButton.addEventListener("click", () => deleteItem(checkedIdices[idx]))
 
 			buttonsDiv.appendChild(cost)
 			buttonsDiv.appendChild(clearButton)
@@ -197,8 +207,10 @@ function displayList() {
 		document.getElementById("hr").classList.remove("vanish")
 		checkedListHeading.classList.remove("vanish")
 	}
-
-
+	else {
+		document.getElementById("hr").classList.add("vanish")
+		checkedListHeading.classList.add("vanish")
+	}
 }
 
 
