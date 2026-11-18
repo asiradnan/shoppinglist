@@ -158,6 +158,11 @@ function displayList() {
 			totalCost += item.cost
 			const li = document.createElement("li")
 			const div = document.createElement("div")
+			div.id = "checkedListDiv"
+			const img = document.createElement('img');
+			img.src = './assets/check.svg';
+			img.alt = 'Checkmark'; 
+
 			const itemName = document.createElement("span")
 			itemName.textContent = `${item.name}`
 			itemName.classList.add("completed")
@@ -165,10 +170,12 @@ function displayList() {
 			const buttonsDiv = document.createElement("div")
 
 			const cost = document.createElement("span")
+			cost.id = "cost"
 			cost.innerText = item.cost + " Taka"
 			cost.classList.add("cost")
 
 			const clearButton = document.createElement("button")
+			clearButton.id = "clearButton"
 			clearButton.textContent = "Clear"
 			clearButton.addEventListener("click", () => toggleCompletedStatus(idx))
 
@@ -180,10 +187,8 @@ function displayList() {
 			buttonsDiv.appendChild(clearButton)
 			buttonsDiv.appendChild(deleteButton)
 
+			div.appendChild(img)
 			div.appendChild(itemName)
-			if (item.completed) {
-
-			}
 			div.appendChild(buttonsDiv)
 			li.appendChild(div)
 			checkedListDisplay.appendChild(li)

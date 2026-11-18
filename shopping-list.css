@@ -1,12 +1,19 @@
+
+
 body {
   background-color: var(--color-surface);
   font-family: "Plus Jakarta Sans", sans-serif;
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* header, main, footer (use `1fr auto` if no header) */
+  min-height: 100dvh; /* or 100vh */
+  /* margin: 0; */
 }
 
 main {
   display: none;
   flex-direction: column;
-  margin: auto;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 main section {
@@ -125,6 +132,29 @@ hr {
 #checkedListHeading p {
   margin: 0;
 }
+
+#checkedListDiv {
+  display: grid;
+  grid-template-columns: 10% 40% 50%;
+  align-items: center;
+  align-content: center;
+  padding: 2% 1% 2% 4%;
+}
+ 
+#cost {
+background-color: var(--color-matcha-light);
+  color: var(--color-on-surface) ;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 4px 8px 4px 8px;
+  font-size: 0.7rem;
+}
+
+#clearButton {
+  /* font-size: 0.8rem; */
+  color: var(--color-on-surface-variant);
+  font-weight: 500;
+}
 #totalCost {
   background-color: var(--color-surface-container-low);
   color: var(--color-on-surface-variant);
@@ -138,7 +168,17 @@ hr {
   color: var(--color-primary) ;
   font-weight: 700;
 }
-
+footer {
+  padding-top: 2%;
+  padding-bottom: 2%;
+  text-align: center;
+  background-color: var(--color-surface-container-low);
+}
+footer a {
+  text-decoration: none;
+  color: var(--color-on-surface);
+  font-size: 1rem;
+}
 .vanish {
   display: none;
 }
