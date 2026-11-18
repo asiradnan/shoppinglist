@@ -63,29 +63,69 @@ function displayFamilies() {
 		families.forEach((family, idx) => {
 			const li = document.createElement("li")
 			const div = document.createElement("div")
+			const container = document.createElement("div")
+			div.classList.add("familyListFirstDiv")
+			container.classList.add("container")
 			const detailButton = document.createElement("button")
-			detailButton.textContent = "Show Detail"
+			detailButton.classList.add("detailButton")
+			detailButton.innerHTML =
+				`
+				<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" style="vertical-align: middle; margin-right: 4px;">
+					<path fill="currentColor" d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+				</svg>
+				Show Detail
+				`;
 			const familyDetailDiv = document.createElement("div")
+			familyDetailDiv.classList.add("familyDetail")
 			detailButton.addEventListener("click", () => {
 				if (familyDetailDiv.style.display == "none") {
 					familyDetailDiv.style.display = "block"
-					detailButton.textContent = "Hide Detail"
+					detailButton.innerHTML = `
+					<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" style="vertical-align: middle; margin-right: 4px;">
+						<path fill="currentColor" d="M480-528 296-344l-56-56 240-240 240 240-56 56-240-240Z"/>
+					</svg>
+					Hide Detail
+					`;
 				}
 				else {
 					familyDetailDiv.style.display = "none"
-					detailButton.textContent = "Show Detail"
+					detailButton.innerHTML =
+						`
+				<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" style="vertical-align: middle; margin-right: 4px;">
+					<path fill="currentColor" d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+				</svg>
+				Show Detail
+				`;
 				}
 			})
 			const span = document.createElement("span")
 			span.textContent = family.name
 			div.appendChild(span)
+			const buttonsDiv = document.createElement("div")
+			buttonsDiv.classList.add("buttonsDiv")
 			if (family.id != selectedFamilyId) {
 				const button = document.createElement("button")
-				button.textContent = "select"
+				button.textContent = "Select"
 				button.addEventListener("click", () => selectFamily(family))
-				div.appendChild(button)
+				buttonsDiv.appendChild(button)
 			}
-			div.appendChild(detailButton)
+			else {
+				const button = document.createElement("button")
+				button.innerHTML = `
+				<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" style="vertical-align: middle; margin-right: 4px;">
+					<path fill="currentColor" d="M268-240 42-466l57-56 170 170 56 56-57 56Zm226 0L268-466l56-57 170 170 368-368 56 57-424 424Zm0-226-57-56 198-198 57 56-198 198Z"/>
+				</svg>
+				Selected Family
+				`;
+				button.disabled = true
+				button.addEventListener("click", () => selectFamily(family))
+				buttonsDiv.appendChild(button)
+				const activeChip = document.createElement("span")
+				activeChip.textContent = "Active"
+				activeChip.id = "activeChip"
+				div.appendChild(activeChip)
+			}
+			buttonsDiv.appendChild(detailButton)
 			familyDetailDiv.style.display = "none"
 			const familyTitle = document.createElement("h3")
 			familyTitle.textContent = "Members"
@@ -130,12 +170,17 @@ function displayFamilies() {
 				inviteForm.addEventListener("submit", async (event) => {
 					event.preventDefault()
 					const response = await inviteMember(input.value, family.id)
-					alert(response.ok? "Invite sent!" : "Could not sent invite")
+					alert(response.ok ? "Invite sent!" : "Could not sent invite")
 					input.value = ""
 				})
 				familyDetailDiv.appendChild(inviteForm)
 			}
-			li.appendChild(div)
+			container.appendChild(div)
+			const moreText = document.createElement("span")
+			moreText.textContent = `${family.members.length} members`
+			container.appendChild(moreText)
+			li.appendChild(container)
+			li.appendChild(buttonsDiv)
 			li.appendChild(familyDetailDiv)
 			familyList.appendChild(li)
 		});
