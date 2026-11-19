@@ -72,7 +72,7 @@ form button {
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
-  min-width: 1.2rem;
+  min-width: 1rem;
   font-variant-numeric: tabular-nums;
   margin-left: 2px;
 }
@@ -99,7 +99,7 @@ form button {
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
-  min-width: 1.2rem;
+  min-width: 1rem;
   font-variant-numeric: tabular-nums;
   margin-left: 2px;
 }
@@ -208,4 +208,5 @@ img {
 #clearButton {
   color: var(--color-on-surface-variant);
   font-weight: 500;
+  width: auto; padding: 4px 8px;
 }

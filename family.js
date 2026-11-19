@@ -152,6 +152,7 @@ function displayFamilies() {
 				updateForm.appendChild(updateFormSubmitButton)
 				updateForm.addEventListener("submit", async (event) => {
 					event.preventDefault()
+					if (nameInput.value == "") return
 					const updatedFamily = await updateFamily({ ...family, "name": nameInput.value })
 					span.textContent = updatedFamily.name
 					if (family.id == selectedFamilyId) selectFamily({ id: updatedFamily.id, name: updatedFamily.name })
@@ -174,6 +175,7 @@ function displayFamilies() {
 				inviteForm.appendChild(formSubmitButton)
 				inviteForm.addEventListener("submit", async (event) => {
 					event.preventDefault()
+					if (input.value == "") return
 					const response = await inviteMember(input.value, family.id)
 					alert(response.ok ? "Invite sent!" : "Could not sent invite")
 					input.value = ""
