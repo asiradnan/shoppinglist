@@ -177,8 +177,15 @@ function displayFamilies() {
 					event.preventDefault()
 					if (input.value == "") return
 					const response = await inviteMember(input.value, family.id)
-					alert(response.ok ? "Invite sent!" : "Could not sent invite")
-					input.value = ""
+					if (response.ok) {
+						input.value = ""
+						alert("Invite sent!")
+					}
+					else {
+						const data = await response.json()
+						alert(data.error)
+					}
+
 				})
 				familyDetailDiv.appendChild(inviteFormHeader)
 				familyDetailDiv.appendChild(inviteForm)
