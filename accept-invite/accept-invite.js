@@ -10,13 +10,16 @@ async function joinFamily(token) {
         body: JSON.stringify({ "token": token }),
         credentials: "include"
     })
-    const data  = await response.json()
+    const data = await response.json()
     console.log(data)
     console.log(response)
     if (response.ok) window.location.href = "/"
     else if (response.status === 401 || data.detail?.includes("Authentication")) window.location.href = `https://accounts.asiradnan.com/login?next=${encodeURIComponent(window.location.href)}`
     else {
-        document.getElementById("status").textContent = data.error
+        const status = document.getElementById("status")
+        status.textContent = data.error
+        status.classList.add("error")
+        document.getElementById("homeLink").classList.remove("vanish")
     }
 }
 
