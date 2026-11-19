@@ -9,13 +9,14 @@ main>h4 {
     background-color: var(--color-surface-container-lowest);
     margin: 0 8px;
     padding: 4px 0;
+    border: 1px solid var(--color-outline-variant);
+    border-radius: 12px;
 }
 
 #addFamilySection>h6 {
     font-size: 1.2rem;
     font-weight: 500;
-    margin: 0;
-    margin-top: 2px;
+    margin: 4px 8px;
 }
 
 
@@ -41,6 +42,8 @@ main>h4 {
     padding: 8px;
     color: var(--color-matcha-light);
     border: 1px solid var(--color-matcha-light);
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 ul {
@@ -85,12 +88,15 @@ ul {
 
 .buttonsDiv {
     display: grid;
-    grid-template-columns: 65% auto;
+    grid-template-columns: 56% auto;
     column-gap: 4px;
     margin-top: 2px;
 }
 
 li button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 20px;
     padding: 6px;
     font-size: 0.8rem;
@@ -108,6 +114,7 @@ li button {
     border-radius: 12px;
     padding: 4px;
 }
+
 .familyDetail>h3 {
     font-size: 1rem;
     font-weight: 500;
@@ -119,6 +126,7 @@ li button {
     padding: 0;
     margin: 0 12px;
 }
+
 .familyDetail li {
     list-style: none;
     background-color: var(--color-surface-container-lowest);
@@ -126,4 +134,33 @@ li button {
     padding: 8px;
     border-radius: 12px;
     font-size: 0.8rem;
+}
+
+.familyDetail>h5 {
+    font-weight: 500;
+    font-size: 0.75rem;
+    margin: 12px 8px 4px 8px;
+    color: var(--color-on-surface);
+}
+
+.familyDetail>form {
+    display: grid;
+    grid-template-columns: 65% auto;
+    column-gap: 4px;
+    margin: 0 8px 8px 8px;
+}
+
+.familyDetail input {
+    border: 1px solid var(--color-surface-container-lowest);
+    border-radius: 12px;
+    padding: 4px 8px;
+    color: var(--color-on-surface);
+}
+
+.familyDetail button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 500;
 }

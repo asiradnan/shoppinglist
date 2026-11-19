@@ -139,13 +139,15 @@ function displayFamilies() {
 			familyDetailDiv.appendChild(members)
 			console.log(currentUser, family.created_by)
 			if (currentUser.username == family.created_by || currentUser.user_id == family.created_by) {
+				const updateFormHeader = document.createElement("h5")
+				updateFormHeader.textContent = "Rename Family"
 				const updateForm = document.createElement('form')
 				const nameInput = document.createElement("input")
-				nameInput.placeholder = "New family name"
+				nameInput.placeholder = family.name
 				nameInput.name = "name"
 				const updateFormSubmitButton = document.createElement("button")
 				updateFormSubmitButton.type = "submit"
-				updateFormSubmitButton.textContent = "Change Name"
+				updateFormSubmitButton.textContent = "Update"
 				updateForm.appendChild(nameInput)
 				updateForm.appendChild(updateFormSubmitButton)
 				updateForm.addEventListener("submit", async (event) => {
@@ -155,8 +157,11 @@ function displayFamilies() {
 					if (family.id == selectedFamilyId) selectFamily({ id: updatedFamily.id, name: updatedFamily.name })
 					nameInput.value = ""
 				})
+				familyDetailDiv.appendChild(updateFormHeader)
 				familyDetailDiv.appendChild(updateForm)
 
+				const inviteFormHeader = document.createElement("h5")
+				inviteFormHeader.textContent = "Invite Family Member"
 				const inviteForm = document.createElement('form')
 				const input = document.createElement("input")
 				input.type = "email"
@@ -164,7 +169,7 @@ function displayFamilies() {
 				input.name = "email"
 				const formSubmitButton = document.createElement("button")
 				formSubmitButton.type = "submit"
-				formSubmitButton.textContent = "Invite Member"
+				formSubmitButton.textContent = "Invite"
 				inviteForm.appendChild(input)
 				inviteForm.appendChild(formSubmitButton)
 				inviteForm.addEventListener("submit", async (event) => {
@@ -173,6 +178,7 @@ function displayFamilies() {
 					alert(response.ok ? "Invite sent!" : "Could not sent invite")
 					input.value = ""
 				})
+				familyDetailDiv.appendChild(inviteFormHeader)
 				familyDetailDiv.appendChild(inviteForm)
 			}
 			container.appendChild(div)
