@@ -32,8 +32,9 @@ input {
   font-family: 'Plus Jakarta Sans';
   padding: 8px;
   font-size: 1rem;
-  border: 1px solid var(--color-outline-variant); /* replaces ugly 3D browser border */
-  border-radius: 16px;      
+  border: 1px solid var(--color-outline-variant);
+  /* replaces ugly 3D browser border */
+  border-radius: 16px;
   outline: none;
   background: var(--color-surface-container-low)
 }
@@ -59,6 +60,23 @@ form button {
   margin: 0;
 }
 
+#stillToGet {
+  background-color: var(--color-peach);
+  font-style: normal;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--color-secondary);
+  padding: 2px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  min-width: 1.2rem;
+  font-variant-numeric: tabular-nums;
+  margin-left: 2px;
+}
+
 .smallHeadingBeforeList span {
   font-size: 0.8rem;
   font-style: italic;
@@ -67,6 +85,23 @@ form button {
 
 .smallHeadingBeforeList p {
   font-size: 0.85rem;
+}
+
+#doneCount {
+  background-color: var(--color-matcha-light);
+  font-style: normal;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--color-primary);
+  padding: 4px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  min-width: 1.2rem;
+  font-variant-numeric: tabular-nums;
+  margin-left: 2px;
 }
 
 ul {
@@ -78,7 +113,7 @@ li {
   margin-bottom: 2%;
 }
 
-li > div {
+li>div {
   display: flex;
   justify-content: space-between;
   background-color: var(--color-surface-container-lowest);
@@ -144,7 +179,7 @@ hr {
   grid-template-columns: 12% 40% auto;
   align-items: center;
   align-content: center;
-  padding: 1% ;
+  padding: 1%;
   background-color: var(--color-surface-container-low);
 }
 

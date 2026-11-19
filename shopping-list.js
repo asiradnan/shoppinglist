@@ -135,6 +135,7 @@ function displayList() {
 			uncheckedIdices.push(idx)
 		}
 	})
+	document.getElementById("stillToGet").textContent = uncheckedList.length
 	uncheckedList.forEach((item, idx) => {
 		const li = document.createElement("li")
 		const div = document.createElement("div")
@@ -161,7 +162,7 @@ function displayList() {
 		li.appendChild(div)
 		shoppingListDisplay.appendChild(li)
 	})
-
+	document.getElementById("doneCount").textContent = checkedList.length
 	if (checkedList.length) {
 		let totalCost = 0
 		checkedList.forEach((item, idx) => {
