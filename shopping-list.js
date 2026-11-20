@@ -40,7 +40,8 @@ async function fetchShoppingList() {
 	await setFamily()
 	const selectedFamilyId = JSON.parse(localStorage.getItem("family"))?.id
 	if (!selectedFamilyId) {
-		document.getElementById("fetching").textContent = "Join a family or create one"
+		fetching.classList.add("noSpinner")
+		fetching.textContent = "Join a family or create one"
 		return
 	}
 	isFetching = true

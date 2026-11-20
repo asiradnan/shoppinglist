@@ -49,10 +49,16 @@ header a {
   padding: 2% 8%;
   border-radius: 16px;
   font-size: 0.7rem;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
 }
 
-header a:hover {
-  color: #2D4829;
+header a:not(#profileIcon):hover {
+  background-color: var(--color-matcha-light);
+  color: #1D331A;
+}
+
+header a:not(#profileIcon):active {
+  transform: scale(0.95);
 }
 
 #profileIcon {
