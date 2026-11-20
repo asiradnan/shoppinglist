@@ -112,14 +112,13 @@ function displayList() {
 	const selectedFamilyId = selectedFamily.id
 	document.getElementById("headerWithFamilyName").textContent = `${selectedFamily.name} Family Shopping List`
 	fetching.style.display = "none"
-	shoppingListHeading.classList.remove("vanish")
-	shoppingListDisplay.replaceChildren()
 	checkedListDisplay.replaceChildren()
 	shoppingList.filter((item) => item.family == selectedFamilyId)
 	if (shoppingList.length === 0) {
 		const h5 = document.createElement("h5")
 		h5.textContent = 'No Items for this family. Try switching family or create new item.'
 		shoppingListDisplay.appendChild(h5)
+		return
 	}
 	let checkedList = []
 	let uncheckedList = []
@@ -135,33 +134,8 @@ function displayList() {
 			uncheckedIdices.push(idx)
 		}
 	})
+	displayUncheckedList(uncheckedList, uncheckedIdices)
 	document.getElementById("stillToGet").textContent = uncheckedList.length
-	uncheckedList.forEach((item, idx) => {
-		const li = document.createElement("li")
-		const div = document.createElement("div")
-		const itemName = document.createElement("span")
-		itemName.textContent = `${item.name}`
-
-		const buttonsDiv = document.createElement("div")
-
-		const doneButton = document.createElement("button")
-		doneButton.textContent = "\u2713 Done"
-		doneButton.addEventListener("click", () => toggleCompletedStatus(uncheckedIdices[idx]))
-		doneButton.classList.add("doneButton")
-
-		const deleteButton = document.createElement("button")
-		deleteButton.textContent = "\u2715"
-		deleteButton.addEventListener("click", () => deleteItem(uncheckedIdices[idx]))
-
-		buttonsDiv.appendChild(doneButton)
-		buttonsDiv.appendChild(deleteButton)
-
-		div.appendChild(itemName)
-
-		div.appendChild(buttonsDiv)
-		li.appendChild(div)
-		shoppingListDisplay.appendChild(li)
-	})
 	document.getElementById("doneCount").textContent = checkedList.length
 	if (checkedList.length) {
 		let totalCost = 0
@@ -200,7 +174,10 @@ function displayList() {
 
 			div.appendChild(img)
 			div.appendChild(itemName)
-			div.appendChild(buttonsDiv)
+
+			div.appendChild(cost)
+			div.appendChild(clearButton)
+			div.appendChild(deleteButton)
 			li.appendChild(div)
 			checkedListDisplay.appendChild(li)
 		})
@@ -212,6 +189,33 @@ function displayList() {
 		document.getElementById("hr").classList.add("vanish")
 		checkedListHeading.classList.add("vanish")
 	}
+}
+
+function displayUncheckedList(uncheckedList, uncheckedIdices) {
+	shoppingListHeading.classList.remove("vanish")
+	shoppingListDisplay.replaceChildren()
+	uncheckedList.forEach((item, idx) => {
+		const li = document.createElement("li")
+		const div = document.createElement("div")
+		const itemName = document.createElement("span")
+		itemName.textContent = `${item.name}`
+
+
+		const doneButton = document.createElement("button")
+		doneButton.textContent = "\u2713 Done"
+		doneButton.addEventListener("click", () => toggleCompletedStatus(uncheckedIdices[idx]))
+		doneButton.classList.add("doneButton")
+
+		const deleteButton = document.createElement("button")
+		deleteButton.textContent = "\u2715"
+		deleteButton.addEventListener("click", () => deleteItem(uncheckedIdices[idx]))
+
+		div.appendChild(itemName)
+		div.appendChild(doneButton)
+		div.appendChild(deleteButton)
+		li.appendChild(div)
+		shoppingListDisplay.appendChild(li)
+	})
 }
 
 
