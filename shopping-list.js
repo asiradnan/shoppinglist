@@ -224,7 +224,7 @@ function displayUncheckedList(uncheckedList, uncheckedIdices) {
 
 		const doneButton = document.createElement("button")
 		doneButton.textContent = "\u2713 Done"
-		doneButton.addEventListener("click", () => toggleCompletedStatus(uncheckedIdices[idx]))
+		doneButton.addEventListener("click", () => toggleCompletedStatus(uncheckedIdices[idx], doneButton))
 		doneButton.classList.add("doneButton")
 
 		const deleteButton = document.createElement("button")
@@ -259,6 +259,7 @@ async function toggleCompletedStatus(idx, button) {
 		itemToBeUpdated.cost = parseInt(cost)
 	}
 	itemToBeUpdated.completed = !wasCompleted
+	const originalLabel = button ? button.textContent : ""
 	if (button) {
 		button.disabled = true
 		button.textContent = ""
@@ -273,7 +274,7 @@ async function toggleCompletedStatus(idx, button) {
 		if (button) {
 			button.disabled = false
 			button.classList.remove("clearing")
-			button.textContent = "Clear"
+			button.textContent = originalLabel
 		}
 	}
 }

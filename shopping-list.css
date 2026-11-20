@@ -164,15 +164,28 @@ li div button {
   background: none;
   border: none;
   width: 32px;
+  height: 28px;
+  border-radius: 50%;
   color: var(--color-on-surface-variant);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+li div button:not(.doneButton):not(#clearButton):hover:not(:disabled) {
+  background-color: var(--color-peach);
+  color: var(--color-secondary);
+}
+
+li div button:not(.doneButton):not(#clearButton):active:not(:disabled) {
+  transform: scale(0.92);
 }
 
 li div button.deleting {
   cursor: wait;
+  background-color: var(--color-peach);
 }
 
 li div button.deleting::before {
@@ -192,6 +205,32 @@ li div button.deleting::before {
   border-radius: 10px;
   padding: 4px 8px 4px 8px;
   width: 72px;
+  height: auto;
+}
+
+.doneButton:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: var(--color-surface-container-lowest);
+}
+
+.doneButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.doneButton.clearing {
+  cursor: wait;
+  background-color: var(--color-matcha-light);
+  color: var(--color-primary);
+}
+
+.doneButton.clearing::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: add-spin 0.65s linear infinite;
 }
 
 hr {
