@@ -267,4 +267,32 @@ img {
   color: var(--color-on-surface-variant);
   font-weight: 500;
   width: auto;
+  padding: 4px 8px;
+  border-radius: 10px;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+#clearButton:hover:not(:disabled) {
+  background-color: var(--color-peach);
+  color: var(--color-secondary);
+}
+
+#clearButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+#clearButton.clearing {
+  cursor: wait;
+  background-color: var(--color-peach);
+  color: var(--color-secondary);
+}
+
+#clearButton.clearing::before {
+  content: "";
+  width: 11px;
+  height: 11px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: add-spin 0.65s linear infinite;
 }

@@ -183,7 +183,7 @@ function displayList() {
 			const clearButton = document.createElement("button")
 			clearButton.id = "clearButton"
 			clearButton.textContent = "Clear"
-			clearButton.addEventListener("click", () => toggleCompletedStatus(checkedIdices[idx]))
+			clearButton.addEventListener("click", () => toggleCompletedStatus(checkedIdices[idx], clearButton))
 
 			const deleteButton = document.createElement("button")
 			deleteButton.textContent = "\u2715"
@@ -240,9 +240,10 @@ function displayUncheckedList(uncheckedList, uncheckedIdices) {
 }
 
 
-async function toggleCompletedStatus(idx) {
+async function toggleCompletedStatus(idx, button) {
 	let itemToBeUpdated = shoppingList[idx]
-	if (itemToBeUpdated.completed) {
+	const wasCompleted = itemToBeUpdated.completed
+	if (wasCompleted) {
 		itemToBeUpdated.cost = 0;
 	}
 
@@ -257,12 +258,24 @@ async function toggleCompletedStatus(idx) {
 		}
 		itemToBeUpdated.cost = parseInt(cost)
 	}
-	itemToBeUpdated.completed = !itemToBeUpdated.completed
-	console.log(shoppingList)
-	const updatedItem = await updateItem(itemToBeUpdated)
-	shoppingList[idx] = updatedItem
-	console.log(shoppingList)
-	displayList()
+	itemToBeUpdated.completed = !wasCompleted
+	if (button) {
+		button.disabled = true
+		button.textContent = ""
+		button.classList.add("clearing")
+	}
+	try {
+		const updatedItem = await updateItem(itemToBeUpdated)
+		shoppingList[idx] = updatedItem
+		displayList()
+	} catch (err) {
+		itemToBeUpdated.completed = wasCompleted
+		if (button) {
+			button.disabled = false
+			button.classList.remove("clearing")
+			button.textContent = "Clear"
+		}
+	}
 }
 
 
