@@ -11,9 +11,17 @@ const fetching = document.getElementById("fetching")
 const shoppingListHeading = document.getElementById("shoppingListHeading")
 const checkedListHeading = document.getElementById("checkedListHeading")
 
-itemAddForm.addEventListener("submit", (event) => {
+itemAddForm.addEventListener("submit", async (event) => {
 	event.preventDefault()
-	addItemToList()
+	const formSubmitButton = document.querySelector("#itemAddForm button")
+	formSubmitButton.disabled = true
+	formSubmitButton.textContent = "Adding"
+	try {
+		await addItemToList()
+	} finally {
+		formSubmitButton.disabled = false
+		formSubmitButton.textContent = "+ \u00A0Add"
+	}
 })
 
 
@@ -93,18 +101,31 @@ async function updateItem(itemToBeUpdated) {
 	return data
 }
 
-async function deleteItem(idx) {
+async function deleteItem(idx, button) {
 	const id = shoppingList[idx].id
-	const response = await fetch(`${API_URL}/items/${id}/`, {
-		method: "DELETE",
-		headers: {
-			'Content-Type': 'application/json',
-			'X-CSRFToken': getCookie()
-		},
-		credentials: "include"
-	})
-	shoppingList.splice(idx, 1)
-	displayList()
+	if (button) {
+		button.disabled = true
+		button.textContent = ""
+		button.classList.add("deleting")
+	}
+	try {
+		await fetch(`${API_URL}/items/${id}/`, {
+			method: "DELETE",
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCookie()
+			},
+			credentials: "include"
+		})
+		shoppingList.splice(idx, 1)
+		displayList()
+	} catch (err) {
+		if (button) {
+			button.disabled = false
+			button.classList.remove("deleting")
+			button.textContent = "\u2715"
+		}
+	}
 }
 
 function displayList() {
@@ -166,7 +187,7 @@ function displayList() {
 
 			const deleteButton = document.createElement("button")
 			deleteButton.textContent = "\u2715"
-			deleteButton.addEventListener("click", () => deleteItem(checkedIdices[idx]))
+			deleteButton.addEventListener("click", () => deleteItem(checkedIdices[idx], deleteButton))
 
 			buttonsDiv.appendChild(cost)
 			buttonsDiv.appendChild(clearButton)
@@ -208,7 +229,7 @@ function displayUncheckedList(uncheckedList, uncheckedIdices) {
 
 		const deleteButton = document.createElement("button")
 		deleteButton.textContent = "\u2715"
-		deleteButton.addEventListener("click", () => deleteItem(uncheckedIdices[idx]))
+		deleteButton.addEventListener("click", () => deleteItem(uncheckedIdices[idx], deleteButton))
 
 		div.appendChild(itemName)
 		div.appendChild(doneButton)

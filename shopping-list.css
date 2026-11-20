@@ -21,7 +21,7 @@ form {
   background-color: var(--color-surface-container-lowest);
   padding: 2%;
   display: grid;
-  grid-template-columns: 75% auto;
+  grid-template-columns: 75% 1fr;
   column-gap: 5px;
   border-radius: 16px;
   margin: 4% auto;
@@ -45,7 +45,40 @@ form button {
   border-radius: 25px;
   font-family: 'Plus Jakarta Sans';
   font-size: 0.85rem;
+  font-weight: 500;
   border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+form button:disabled {
+  background-color: var(--color-matcha-light);
+  color: var(--color-primary);
+  cursor: wait;
+  font-size: 0.75rem;
+}
+
+form button:disabled::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: add-spin 0.65s linear infinite;
+}
+
+@keyframes add-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .smallHeadingBeforeList {
@@ -132,6 +165,24 @@ li div button {
   border: none;
   width: 32px;
   color: var(--color-on-surface-variant);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+li div button.deleting {
+  cursor: wait;
+}
+
+li div button.deleting::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-secondary);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: add-spin 0.65s linear infinite;
 }
 
 .doneButton {
