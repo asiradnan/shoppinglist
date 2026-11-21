@@ -137,6 +137,11 @@ function displayList() {
 	checkedListDisplay.replaceChildren()
 	shoppingList.filter((item) => item.family == selectedFamilyId)
 	if (shoppingList.length === 0) {
+		shoppingListDisplay.replaceChildren()
+		checkedListDisplay.replaceChildren()
+		document.getElementById("hr").classList.add("vanish")
+		checkedListHeading.classList.add("vanish")
+		shoppingListHeading.classList.add("vanish")
 		const h5 = document.createElement("h5")
 		h5.textContent = 'No Items for this family. Try switching family or create new item.'
 		shoppingListDisplay.appendChild(h5)

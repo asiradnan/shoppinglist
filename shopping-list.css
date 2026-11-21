@@ -72,7 +72,7 @@ form {
   display: grid;
   grid-template-columns: 75% 1fr;
   column-gap: 5px;
-  border-radius: 16px;
+  border-radius: 24px;
   margin: 4% auto;
   border: 1px solid var(--color-outline-variant);
 }
@@ -81,13 +81,15 @@ input {
   font-family: 'Plus Jakarta Sans';
   padding: 8px 12px;
   font-size: 1rem;
-  border: 1px solid var(--color-outline-variant);
-  /* replaces ugly 3D browser border */
-  border-radius: 16px;
+  border: 1px solid transparent;
+  border-radius: 20px;
   outline: none;
   background: var(--color-surface-container-low);
 }
 
+input:focus {
+  border: 1px solid var(--color-primary);
+}
 
 
 form button {
@@ -158,7 +160,7 @@ form button:disabled::before {
   font-size: 0.8rem;
   line-height: 1;
   color: var(--color-secondary);
-  padding: 2px;
+  padding: 3px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -185,7 +187,7 @@ form button:disabled::before {
   font-size: 0.8rem;
   line-height: 1;
   color: var(--color-primary);
-  padding: 4px;
+  padding: 3px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;

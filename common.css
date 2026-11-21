@@ -9,6 +9,7 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 100dvh;
+  color: var(--color-on-surface)
 }
 
 main {
