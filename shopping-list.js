@@ -65,7 +65,11 @@ async function addItemToList() {
 	if (itemInput.value.trim() == "") return;
 	const selectedFamilyId = JSON.parse(localStorage.getItem("family"))?.id
 	if (!selectedFamilyId) {
-		alert("Please create or select a family first")
+		await showAlertDialog({
+			title: "No Family Selected",
+			message: "Please create or select a family first.",
+			variant: "error"
+		})
 		return
 	}
 	const newItem = {
@@ -274,17 +278,10 @@ async function toggleCompletedStatus(idx, button) {
 	if (wasCompleted) {
 		itemToBeUpdated.cost = 0;
 	}
-
 	else {
-		let cost = prompt("Enter cost: ")
+		const cost = await showCostDialog(itemToBeUpdated.name)
 		if (cost == null) return
-		cost = Number(cost.trim())
-		while (Number.isNaN(cost)) {
-			cost = prompt("Enter cost (only digits): ")
-			if (cost == null) return
-			cost = Number(cost.trim())
-		}
-		itemToBeUpdated.cost = parseInt(cost)
+		itemToBeUpdated.cost = cost
 	}
 	itemToBeUpdated.completed = !wasCompleted
 	const originalLabel = button ? button.textContent : ""

@@ -198,11 +198,19 @@ function displayFamilies() {
 						const response = await inviteMember(input.value, family.id)
 						if (response.ok) {
 							input.value = ""
-							alert("Invite sent!")
+							await showAlertDialog({
+								title: "Invite Sent",
+								message: "Your family invitation has been sent!",
+								variant: "success"
+							})
 						}
 						else {
 							const data = await response.json()
-							alert(data.error)
+							await showAlertDialog({
+								title: "Couldn't Send Invite",
+								message: data.error || "Something went wrong.",
+								variant: "error"
+							})
 						}
 					} finally {
 						formSubmitButton.disabled = false
