@@ -2,6 +2,7 @@ let shoppingList = []
 let deletedCount = 0
 let currentCategory = "All"
 let isFetching = true
+let animatedItemId = null
 const API_URL = "https://shoppinglistbackend.asiradnan.com/api"
 
 const itemAddForm = document.getElementById("itemAddForm")
@@ -85,6 +86,7 @@ async function addItemToList() {
 	const data = await response.json()
 	console.log(data)
 	shoppingList.push(data)
+	animatedItemId = data.id
 	itemInput.value = ""
 	displayList()
 }
@@ -106,6 +108,7 @@ async function updateItem(itemToBeUpdated) {
 
 async function deleteItem(idx, button) {
 	const id = shoppingList[idx].id
+	const li = button ? button.closest("li") : null
 	if (button) {
 		button.disabled = true
 		button.textContent = ""
@@ -120,6 +123,10 @@ async function deleteItem(idx, button) {
 			},
 			credentials: "include"
 		})
+		if (li) {
+			li.classList.add("item-deleting")
+			await new Promise((resolve) => setTimeout(resolve, 260))
+		}
 		shoppingList.splice(idx, 1)
 		displayList()
 	} catch (err) {
@@ -213,6 +220,9 @@ function displayList() {
 			div.appendChild(clearButton)
 			div.appendChild(deleteButton)
 			li.appendChild(div)
+			if (item.id === animatedItemId) {
+				li.classList.add("item-entering")
+			}
 			checkedListDisplay.appendChild(li)
 		})
 		document.getElementById("totalAmount").textContent = `${totalCost} Taka`
@@ -223,6 +233,7 @@ function displayList() {
 		document.getElementById("hr").classList.add("vanish")
 		checkedListHeading.classList.add("vanish")
 	}
+	animatedItemId = null
 }
 
 function displayUncheckedList(uncheckedList, uncheckedIdices) {
@@ -248,6 +259,9 @@ function displayUncheckedList(uncheckedList, uncheckedIdices) {
 		div.appendChild(doneButton)
 		div.appendChild(deleteButton)
 		li.appendChild(div)
+		if (item.id === animatedItemId) {
+			li.classList.add("item-entering")
+		}
 		shoppingListDisplay.appendChild(li)
 	})
 }
@@ -256,6 +270,7 @@ function displayUncheckedList(uncheckedList, uncheckedIdices) {
 async function toggleCompletedStatus(idx, button) {
 	let itemToBeUpdated = shoppingList[idx]
 	const wasCompleted = itemToBeUpdated.completed
+	const li = button ? button.closest("li") : null
 	if (wasCompleted) {
 		itemToBeUpdated.cost = 0;
 	}
@@ -280,7 +295,12 @@ async function toggleCompletedStatus(idx, button) {
 	}
 	try {
 		const updatedItem = await updateItem(itemToBeUpdated)
+		if (li) {
+			li.classList.add(wasCompleted ? "item-unchecking" : "item-completing")
+			await new Promise((resolve) => setTimeout(resolve, 260))
+		}
 		shoppingList[idx] = updatedItem
+		animatedItemId = updatedItem.id
 		displayList()
 	} catch (err) {
 		itemToBeUpdated.completed = wasCompleted

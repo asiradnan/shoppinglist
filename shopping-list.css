@@ -372,3 +372,95 @@ img {
 .emptyState a:hover {
   text-decoration: underline;
 }
+
+li.item-deleting {
+  overflow: hidden;
+  pointer-events: none;
+  animation: item-delete-out 0.26s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+li.item-deleting > div {
+  background-color: var(--color-peach);
+  border-color: var(--color-secondary);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+li.item-completing {
+  overflow: hidden;
+  pointer-events: none;
+  animation: item-complete-out 0.26s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+li.item-completing > div {
+  background-color: var(--color-matcha-light);
+  border-color: var(--color-primary);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+li.item-completing span:first-child {
+  text-decoration: line-through;
+  color: var(--color-primary);
+}
+
+li.item-unchecking {
+  overflow: hidden;
+  pointer-events: none;
+  animation: item-uncheck-out 0.26s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+li.item-entering {
+  animation: item-enter-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes item-delete-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    max-height: 70px;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-24px) scale(0.94);
+    max-height: 0;
+    margin-bottom: 0;
+  }
+}
+
+@keyframes item-complete-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 70px;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+    max-height: 0;
+    margin-bottom: 0;
+  }
+}
+
+@keyframes item-uncheck-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 70px;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.96);
+    max-height: 0;
+    margin-bottom: 0;
+  }
+}
+
+@keyframes item-enter-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

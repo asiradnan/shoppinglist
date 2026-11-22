@@ -43,19 +43,22 @@ header h1 {
 }
 
 header a {
-  font-size: 0.8rem;
   text-decoration: none;
-  color: #576555;
-  font-weight: 400;
+  color: var(--color-on-surface-variant);
+  font-weight: 500;
   padding: 2% 8%;
   border-radius: 16px;
   font-size: 0.7rem;
-  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease, filter 0.15s ease;
 }
 
-header a:not(#profileIcon):hover {
-  background-color: var(--color-matcha-light);
-  color: #1D331A;
+header a:not(#profileIcon):not(.selectedNav):hover {
+  background-color: var(--color-outline-variant);
+  color: var(--color-on-surface);
+}
+
+header a.selectedNav:hover {
+  filter: brightness(0.96);
 }
 
 header a:not(#profileIcon):active {
@@ -63,12 +66,20 @@ header a:not(#profileIcon):active {
 }
 
 #profileIcon {
-  padding: 0;
-  background-color: #feece3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-peach);
+  color: var(--color-on-surface);
   border-radius: 50%;
   padding: 4px;
   height: 24px;
   width: 24px;
+  flex-shrink: 0;
+}
+
+#profileIcon:hover {
+  filter: brightness(0.95);
 }
 
 @media (max-width: 600px) {}
@@ -100,9 +111,9 @@ header div {
 }
 
 .selectedNav {
-  background-color: #E2EDE0;
-  color: #1D331A;
-  font-weight: 500;
+  background-color: var(--color-matcha-light);
+  color: var(--color-primary);
+  font-weight: 600;
 }
 @keyframes add-spin {
   to {
@@ -179,17 +190,29 @@ form button:disabled::before {
 }
 
 footer {
-  padding-top: 2%;
-  padding-bottom: 2%;
+  margin-top: 24px;
+  padding: 14px 16px;
   text-align: center;
   background-color: var(--color-surface-container-low);
+  border-top: 1px solid var(--color-outline-variant);
 }
 
 footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   text-decoration: none;
-  color: var(--color-on-surface);
-  font-size: 1rem;
+  color: var(--color-on-surface-variant);
+  font-size: 0.8rem;
   font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 12px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+footer a:hover {
+  color: var(--color-primary);
+  background-color: var(--color-matcha-light);
 }
 
 
