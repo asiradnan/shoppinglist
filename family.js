@@ -5,9 +5,17 @@ let families = []
 const familyList = document.getElementById("familyList")
 const familyCreateForm = document.getElementById("familyCreateForm")
 
-familyCreateForm.addEventListener("submit", (event) => {
+familyCreateForm.addEventListener("submit", async (event) => {
 	event.preventDefault()
-	createFamily()
+	const formSubmitButton = document.querySelector("#familyCreateForm button")
+	formSubmitButton.disabled = true
+	formSubmitButton.textContent = "Creating"
+	try {
+		await createFamily()
+	} finally {
+		formSubmitButton.disabled = false
+		formSubmitButton.textContent = "Create Family"
+	}
 })
 
 
@@ -18,7 +26,6 @@ async function fetchFamilies() {
 	const data = await response.json()
 	console.log(data)
 	families = data
-	isFetching = false
 	if (localStorage.getItem("user") == null) {
 		await fetchUser()
 	}
@@ -52,9 +59,7 @@ async function createFamily() {
 }
 
 function displayFamilies() {
-	if (isFetching == false) {
-		document.getElementById("fetching").style.display = "none"
-	}
+	document.getElementById("fetching").style.display = "none"
 	if (families.length == 0) familyList.textContent = "No Family"
 	else {
 		const selectedFamilyId = JSON.parse(localStorage.getItem("family"))?.id ?? 0;
@@ -152,11 +157,22 @@ function displayFamilies() {
 				updateForm.appendChild(updateFormSubmitButton)
 				updateForm.addEventListener("submit", async (event) => {
 					event.preventDefault()
-					if (nameInput.value == "") return
-					const updatedFamily = await updateFamily({ ...family, "name": nameInput.value })
-					span.textContent = updatedFamily.name
-					if (family.id == selectedFamilyId) selectFamily({ id: updatedFamily.id, name: updatedFamily.name })
-					nameInput.value = ""
+					if (nameInput.value.trim() == "") return
+					updateFormSubmitButton.disabled = true
+					updateFormSubmitButton.textContent = "Updating"
+					try {
+						const updatedFamily = await updateFamily({ ...family, "name": nameInput.value })
+						family.name = updatedFamily.name
+						span.textContent = updatedFamily.name
+						nameInput.placeholder = updatedFamily.name
+						if (family.id == selectedFamilyId) {
+							localStorage.setItem("family", JSON.stringify({ id: updatedFamily.id, name: updatedFamily.name }))
+						}
+						nameInput.value = ""
+					} finally {
+						updateFormSubmitButton.disabled = false
+						updateFormSubmitButton.textContent = "Update"
+					}
 				})
 				familyDetailDiv.appendChild(updateFormHeader)
 				familyDetailDiv.appendChild(updateForm)
@@ -175,17 +191,23 @@ function displayFamilies() {
 				inviteForm.appendChild(formSubmitButton)
 				inviteForm.addEventListener("submit", async (event) => {
 					event.preventDefault()
-					if (input.value == "") return
-					const response = await inviteMember(input.value, family.id)
-					if (response.ok) {
-						input.value = ""
-						alert("Invite sent!")
+					if (input.value.trim() == "") return
+					formSubmitButton.disabled = true
+					formSubmitButton.textContent = "Inviting"
+					try {
+						const response = await inviteMember(input.value, family.id)
+						if (response.ok) {
+							input.value = ""
+							alert("Invite sent!")
+						}
+						else {
+							const data = await response.json()
+							alert(data.error)
+						}
+					} finally {
+						formSubmitButton.disabled = false
+						formSubmitButton.textContent = "Invite"
 					}
-					else {
-						const data = await response.json()
-						alert(data.error)
-					}
-
 				})
 				familyDetailDiv.appendChild(inviteFormHeader)
 				familyDetailDiv.appendChild(inviteForm)
@@ -217,7 +239,7 @@ async function inviteMember(email, familyId) {
 
 function selectFamily(family) {
 	localStorage.setItem("family", JSON.stringify({ id: family.id, name: family.name }))
-	displayFamilies()
+	window.location.href = "index.html"
 }
 
 async function updateFamily(toBeUpdatedFamily) {

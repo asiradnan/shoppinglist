@@ -31,7 +31,9 @@ function removeLoadingScreen() {
 }
 
 async function fetchUserAndShoppingList() {
-	await fetchUser()
+	if (localStorage.getItem("user") == null) {
+		await fetchUser()
+	}
 	removeLoadingScreen()
 	await fetchShoppingList();
 }
@@ -142,9 +144,14 @@ function displayList() {
 		document.getElementById("hr").classList.add("vanish")
 		checkedListHeading.classList.add("vanish")
 		shoppingListHeading.classList.add("vanish")
-		const h5 = document.createElement("h5")
-		h5.textContent = 'No Items for this family. Try switching family or create new item.'
-		shoppingListDisplay.appendChild(h5)
+		const emptyDiv = document.createElement("div")
+		emptyDiv.classList.add("emptyState")
+		emptyDiv.innerHTML = `
+			<div class="emptyStateIcon">🧺</div>
+			<h4>Your list is empty</h4>
+			<p>Add an item above or <a href="family.html">switch family</a>.</p>
+		`
+		shoppingListDisplay.appendChild(emptyDiv)
 		return
 	}
 	let checkedList = []

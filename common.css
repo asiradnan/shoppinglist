@@ -104,6 +104,79 @@ header div {
   color: #1D331A;
   font-weight: 500;
 }
+@keyframes add-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+#fetching {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--color-on-surface-variant);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 24px 0;
+}
+
+#fetching::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-matcha-light);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: add-spin 0.75s linear infinite;
+}
+
+#fetching.noSpinner::before {
+  display: none;
+}
+
+form button {
+  background-color: var(--color-primary);
+  color: var(--color-surface-container-lowest);
+  border-radius: 25px;
+  font-family: 'Plus Jakarta Sans';
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease, filter 0.15s ease;
+}
+
+form button:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+form button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+form button:disabled {
+  background-color: var(--color-matcha-light);
+  color: var(--color-primary);
+  cursor: wait;
+  font-size: 0.75rem;
+}
+
+form button:disabled::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: add-spin 0.65s linear infinite;
+}
 
 footer {
   padding-top: 2%;
